@@ -1,0 +1,20 @@
+{
+  "description": "C4 suite release manifest — maps suite versions to component versions",
+  "latest": "1.0.6",
+  "releases": {
+    "1.0.6": {
+      "date": "2026-03-22",
+      "components": {
+        "c4":             { "version": "1.0.6", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
+        "c4sh":           { "version": "1.0.6", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
+        "c4git":          { "version": "1.0.0", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
+        "c4py":           { "version": "1.0.0", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
+        "c4ts":           { "version": "1.0.5", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
+        "c4-swift":       { "version": "1.0.5", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
+        "libc4":          { "version": "0.1.0", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
+        "c4-containers":  { "version": "1.0.6", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+      },
+      "notes": "Initial coordinated release. TypeScript and Swift implementations, c4sh UX improvements, scan-everything fix."
+    }
+  }
+}
