@@ -2,18 +2,18 @@
 
 Coordinated release infrastructure for the C4 ecosystem. Every component ships together under a single suite version.
 
-## Suite Version 1.0.11
+## Suite Version 1.0.12
 
 | Component | Version | Language | Install |
 |-----------|---------|----------|---------|
-| [c4](https://github.com/Avalanche-io/c4) | 1.0.11 | Go | `brew install mrjoshuak/tap/c4` or binary download |
-| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.11 | Go | included in Homebrew formula |
-| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.11 | Go | included in Homebrew formula |
-| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.11 | Python | `pip install c4py` |
-| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.11 | TypeScript | `npm install @avalanche-io/c4` |
-| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.11 | Swift | SPM: `from: "1.0.11"` |
-| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.11 | C | build from source |
-| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.11 | Docker | `ghcr.io/avalanche-io/c4` |
+| [c4](https://github.com/Avalanche-io/c4) | 1.0.12 | Go | `brew install mrjoshuak/tap/c4` or binary download |
+| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.12 | Go | included in Homebrew formula |
+| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.12 | Go | included in Homebrew formula |
+| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.12 | Python | `pip install c4py` |
+| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.12 | TypeScript | `npm install @avalanche-io/c4` |
+| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.12 | Swift | SPM: `from: "1.0.12"` |
+| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.12 | C | build from source |
+| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.12 | Docker | `ghcr.io/avalanche-io/c4` |
 
 ## How it works
 
@@ -21,16 +21,16 @@ Each component has its own version. A suite release bundles specific component v
 
 ```bash
 # Validate all components are tagged and tests pass
-./scripts/validate.sh 1.0.11
+./scripts/validate.sh 1.0.12
 
 # Build Go binaries for all platforms
-./scripts/build.sh 1.0.11
+./scripts/build.sh 1.0.12
 
 # Generate Homebrew formula
-./scripts/homebrew.sh 1.0.11
+./scripts/homebrew.sh 1.0.12
 
 # Full release: validate + build + publish + GitHub release
-./scripts/release.sh 1.0.11
+./scripts/release.sh 1.0.12
 ```
 
 ## Distribution
@@ -56,7 +56,7 @@ Platform archives on the [Releases](https://github.com/Avalanche-io/c4toolkit/re
 | Windows amd64 | `c4-suite_vX.Y.Z_windows_amd64.zip` |
 | Windows arm64 | `c4-suite_vX.Y.Z_windows_arm64.zip` |
 
-Individual tool archives also available (e.g., `c4_v1.0.11_darwin_arm64.tar.gz`).
+Individual tool archives also available (e.g., `c4_v1.0.12_darwin_arm64.tar.gz`).
 
 ### Package managers
 
@@ -68,15 +68,15 @@ npm install @avalanche-io/c4-node   # TypeScript (Node extensions)
 
 ```swift
 // Swift Package Manager
-.package(url: "https://github.com/Avalanche-io/c4-swift.git", from: "1.0.11")
+.package(url: "https://github.com/Avalanche-io/c4-swift.git", from: "1.0.12")
 ```
 
 ### Containers
 
 ```bash
-docker pull ghcr.io/avalanche-io/c4:1.0.11
-docker pull ghcr.io/avalanche-io/c4-pipeline:1.0.11
-docker pull ghcr.io/avalanche-io/c4-s3worker:1.0.11
+docker pull ghcr.io/avalanche-io/c4:1.0.12
+docker pull ghcr.io/avalanche-io/c4-pipeline:1.0.12
+docker pull ghcr.io/avalanche-io/c4-s3worker:1.0.12
 ```
 
 ## Adding a new suite release
