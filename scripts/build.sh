@@ -14,7 +14,7 @@ DIST="dist/${SUITE_VERSION}"
 RELEASES="releases.json"
 
 if [ ! -f "$RELEASES" ]; then
-    echo "Error: $RELEASES not found. Run from the c4-releases directory." >&2
+    echo "Error: $RELEASES not found. Run from the c4toolkit directory." >&2
     exit 1
 fi
 

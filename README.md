@@ -1,4 +1,4 @@
-# C4 Releases
+# C4 Toolkit
 
 Coordinated release infrastructure for the C4 ecosystem. Every component ships together under a single suite version.
 
@@ -45,7 +45,7 @@ Installs c4, c4sh, and c4git. Updated each suite release.
 
 ### Binary downloads
 
-Platform archives on the [Releases](https://github.com/Avalanche-io/c4-releases/releases) page:
+Platform archives on the [Releases](https://github.com/Avalanche-io/c4toolkit/releases) page:
 
 | Platform | Archive |
 |----------|---------|

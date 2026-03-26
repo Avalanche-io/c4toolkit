@@ -124,7 +124,7 @@ echo ""
 # Step 6: Create GitHub release
 echo "=== Step 6: GitHub release ==="
 if $DRY_RUN; then
-    echo "  Would create release v${SUITE_VERSION} on Avalanche-io/c4-releases"
+    echo "  Would create release v${SUITE_VERSION} on Avalanche-io/c4toolkit"
     echo "  Would upload $(ls dist/${SUITE_VERSION}/*.tar.gz dist/${SUITE_VERSION}/*.zip 2>/dev/null | wc -l | tr -d ' ') archives"
 else
     NOTES=$(jq -r ".releases[\"${SUITE_VERSION}\"].notes" "$RELEASES")
@@ -148,7 +148,7 @@ ${NOTES}
 
 \`\`\`bash
 # Homebrew (macOS/Linux)
-brew install Avalanche-io/tap/c4
+brew install mrjoshuak/tap/c4
 
 # Go tools
 go install github.com/Avalanche-io/c4/cmd/c4@v$(jq -r ".releases[\"${SUITE_VERSION}\"].components.c4.version" "$RELEASES")
@@ -166,7 +166,7 @@ npm install @avalanche-io/c4
 
     echo "  Creating GitHub release..."
     gh release create "v${SUITE_VERSION}" \
-        --repo Avalanche-io/c4-releases \
+        --repo Avalanche-io/c4toolkit \
         --title "C4 Suite ${SUITE_VERSION}" \
         --notes "$BODY" \
         dist/${SUITE_VERSION}/*.tar.gz \

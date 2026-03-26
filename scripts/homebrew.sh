@@ -23,7 +23,7 @@ DARWIN_ARM64_SHA=$(grep "c4-suite.*darwin_arm64" "$DIST/checksums.txt" | awk '{p
 LINUX_AMD64_SHA=$(grep "c4-suite.*linux_amd64" "$DIST/checksums.txt" | awk '{print $1}')
 LINUX_ARM64_SHA=$(grep "c4-suite.*linux_arm64" "$DIST/checksums.txt" | awk '{print $1}')
 
-BASE_URL="https://github.com/Avalanche-io/c4-releases/releases/download/v${SUITE_VERSION}"
+BASE_URL="https://github.com/Avalanche-io/c4toolkit/releases/download/v${SUITE_VERSION}"
 
 GO_TOOLS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | select(.value.lang == \"go\") | .key" "$RELEASES" 2>/dev/null || echo "c4")
 
