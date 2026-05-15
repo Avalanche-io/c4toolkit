@@ -1,19 +1,26 @@
-# C4 Toolkit
+# C4 Toolkit — the ONE place releases happen
 
-Coordinated release infrastructure for the C4 ecosystem. Every component ships together under a single suite version.
+**This repository is the authoritative release coordinator for the C4
+ecosystem.** Every release of every component ships together as a
+single suite version, driven by `releases.json` and the scripts in
+`scripts/`. Do NOT release components individually — the suite ships
+together, or it doesn't ship.
 
-## Suite Version 1.0.12
+For coordination workflow + lessons learned across releases, see the
+workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
+
+## Suite Version 1.0.13
 
 | Component | Version | Language | Install |
 |-----------|---------|----------|---------|
-| [c4](https://github.com/Avalanche-io/c4) | 1.0.12 | Go | `brew install mrjoshuak/tap/c4` or binary download |
-| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.12 | Go | included in Homebrew formula |
-| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.12 | Go | included in Homebrew formula |
-| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.12 | Python | `pip install c4py` |
-| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.12 | TypeScript | `npm install @avalanche-io/c4` |
-| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.12 | Swift | SPM: `from: "1.0.12"` |
-| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.12 | C | build from source |
-| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.12 | Docker | `ghcr.io/avalanche-io/c4` |
+| [c4](https://github.com/Avalanche-io/c4) | 1.0.13 | Go | `brew install mrjoshuak/tap/c4` or binary download |
+| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.13 | Go | included in Homebrew formula |
+| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.13 | Go | included in Homebrew formula |
+| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.13 | Python | `pip install c4py` |
+| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.13 | TypeScript | `npm install @avalanche-io/c4` |
+| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.13 | Swift | SPM: `from: "1.0.13"` |
+| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.13 | C | build from source |
+| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.13 | Docker | `ghcr.io/avalanche-io/c4` |
 
 ## How it works
 
@@ -81,10 +88,34 @@ docker pull ghcr.io/avalanche-io/c4-s3worker:1.0.12
 
 ## Adding a new suite release
 
-1. Edit `releases.json` — add a new version entry with updated component versions
-2. Ensure all component repos are tagged
-3. Run `./scripts/validate.sh <version>` to verify
-4. Run `./scripts/release.sh <version>` to build and publish
+The full process is documented at workspace-level
+`/Users/joshua/ws/active/c4/RELEASE.md`. Summary:
+
+1. Per-component bump + tag + push for all 8 repos (use the iTerm-tabs
+   pattern at `/Users/joshua/ws/active/c4/docs/agent-team-iterm-pattern.md`
+   for parallel execution).
+2. Edit `releases.json` — add a new version entry with updated component
+   versions; set `"latest"` to the new version.
+3. `./scripts/validate.sh <version>` — verify tags exist + tests pass.
+4. `./scripts/build.sh <version>` — produces archives in `dist/<version>/`.
+5. `gh release create v<version> dist/<version>/*` — uploads to the
+   c4toolkit GitHub releases page.
+6. `./scripts/homebrew.sh <version>` — regenerates `homebrew/c4.rb`.
+7. Copy that formula to `mrjoshuak/homebrew-tap/Formula/c4.rb`, commit
+   `Update c4 formula to v<version>`, push.
+8. Verify with the commands in workspace-level `RELEASE.md`.
+
+PyPI (`c4py`) and npm (`@avalanche-io/c4`, `@avalanche-io/c4-node`)
+publishes are done as part of step 1 (the per-component flow), not in
+the c4toolkit run. c4-containers Docker images are built by that
+repo's CI on tag.
+
+## Per-release coordination homes
+
+Each release keeps its working specs, module briefings, friction
+reports, and iTerm-tab orchestration scripts at
+`/Users/joshua/ws/active/c4/release-vX.Y.Z/`. Look at the most recent
+one for the actual templates the next release will reuse.
 
 ## License
 
