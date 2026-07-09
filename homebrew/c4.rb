@@ -1,26 +1,26 @@
 class C4 < Formula
   desc "C4 Universal Content Identification — CLI tools (SMPTE ST 2114)"
   homepage "https://cccc.io"
-  version "1.0.13"
+  version "1.0.14"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.13/c4-suite_v1.0.13_darwin_arm64.tar.gz"
-      sha256 "71d65a6d7849ee3404de6ff70e6b58b53370178b3e7bc8398c6ec4c84f7d17d4"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.14/c4-suite_v1.0.14_darwin_arm64.tar.gz"
+      sha256 "f95942f79d02805d813b19510def94c9c6414f39a520c45c0b1bde9ec5853bd8"
     else
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.13/c4-suite_v1.0.13_darwin_amd64.tar.gz"
-      sha256 "92ee83675ca3cd35c850ed1dd506da2e1850f19c75ff8bec886bbb3419ee7f2c"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.14/c4-suite_v1.0.14_darwin_amd64.tar.gz"
+      sha256 "1b839c1994a89f97506aa5d1bc65186065b8bf4c218f11f97b45579b0c80c40b"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.13/c4-suite_v1.0.13_linux_arm64.tar.gz"
-      sha256 "44fd964012985c2b828f384baf58086dfedcc805a9b15ccbf14c6b1d82e1c0e9"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.14/c4-suite_v1.0.14_linux_arm64.tar.gz"
+      sha256 "3045431d173fea8fcb1ee1c0c0338c9697c13ddfc9d37c21fd2ad91f6c27fbf0"
     else
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.13/c4-suite_v1.0.13_linux_amd64.tar.gz"
-      sha256 "23399b450afbc62bd6348affef1a04a673e460a0e3b470a1a7f6cbe3db5ddfce"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.14/c4-suite_v1.0.14_linux_amd64.tar.gz"
+      sha256 "9cdabf39bffd0954ef85e0fc54ee65fd897e773e13b63472052fa3813e7c78be"
     end
   end
 

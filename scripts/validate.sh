@@ -41,10 +41,10 @@ while IFS=' ' read -r name version repo lang; do
 
     # For Go tools, clone and run tests
     if [ "$lang" = "go" ]; then
-        TMPDIR=$(mktemp -d)
-        if git clone --depth 1 --branch "v${version}" "https://github.com/${repo}.git" "$TMPDIR" 2>/dev/null; then
+        CLONEDIR=$(mktemp -d)
+        if git clone --depth 1 --branch "v${version}" "https://github.com/${repo}.git" "$CLONEDIR" 2>/dev/null; then
             echo -n "  tests: "
-            if (cd "$TMPDIR" && go test ./... 2>&1) > /dev/null 2>&1; then
+            if (cd "$CLONEDIR" && go test ./... 2>&1) > /dev/null 2>&1; then
                 echo "PASS"
             else
                 echo "FAIL"
@@ -52,7 +52,7 @@ while IFS=' ' read -r name version repo lang; do
             fi
 
             # Check for cross-language test vectors
-            if find "$TMPDIR" -name "known_ids.json" -print -quit 2>/dev/null | grep -q .; then
+            if find "$CLONEDIR" -name "known_ids.json" -print -quit 2>/dev/null | grep -q .; then
                 echo "  vectors: present"
             else
                 echo "  vectors: not found (optional)"
@@ -60,7 +60,7 @@ while IFS=' ' read -r name version repo lang; do
         else
             echo "  tests: SKIP (could not clone)"
         fi
-        rm -rf "$TMPDIR"
+        rm -rf "$CLONEDIR"
     fi
 
     echo ""

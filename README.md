@@ -9,18 +9,18 @@ together, or it doesn't ship.
 For coordination workflow + lessons learned across releases, see the
 workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
 
-## Suite Version 1.0.13
+## Suite Version 1.0.14
 
 | Component | Version | Language | Install |
 |-----------|---------|----------|---------|
-| [c4](https://github.com/Avalanche-io/c4) | 1.0.13 | Go | `brew install mrjoshuak/tap/c4` or binary download |
-| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.13 | Go | included in Homebrew formula |
-| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.13 | Go | included in Homebrew formula |
-| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.13 | Python | `pip install c4py` |
-| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.13 | TypeScript | `npm install @avalanche-io/c4` |
-| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.13 | Swift | SPM: `from: "1.0.13"` |
-| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.13 | C | build from source |
-| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.13 | Docker | `ghcr.io/avalanche-io/c4` |
+| [c4](https://github.com/Avalanche-io/c4) | 1.0.14 | Go | `brew install mrjoshuak/tap/c4` or binary download |
+| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.14 | Go | included in Homebrew formula |
+| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.14 | Go | included in Homebrew formula |
+| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.14 | Python | `pip install c4py` |
+| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.14 | TypeScript | `npm install @avalanche-io/c4` |
+| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.14 | Swift | SPM: `from: "1.0.14"` |
+| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.14 | C | build from source |
+| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.14 | Docker | `ghcr.io/avalanche-io/c4` |
 
 ## How it works
 
