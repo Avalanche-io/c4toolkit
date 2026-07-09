@@ -1,7 +1,21 @@
 {
   "description": "C4 suite release manifest — maps suite versions to component versions",
-  "latest": "1.0.14",
+  "latest": "1.0.15",
   "releases": {
+    "1.0.15": {
+      "date": "2026-07-09",
+      "components": {
+        "c4":             { "version": "1.0.15", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
+        "c4sh":           { "version": "1.0.15", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
+        "c4git":          { "version": "1.0.15", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
+        "c4py":           { "version": "1.0.15", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
+        "c4ts":           { "version": "1.0.15", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
+        "c4-swift":       { "version": "1.0.15", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
+        "libc4":          { "version": "1.0.15", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
+        "c4-containers":  { "version": "1.0.15", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+      },
+      "notes": "Same-day supersede of 1.0.14 (which shipped with a Windows defect: the batch durability barrier fsync'd directory handles, which Windows refuses — spurious 'Access is denied' warnings on every c4 id -s / c4 patch and four failing store tests; no data loss). The barrier now routes through a platform-conditional store.SyncDir (no-op on Windows, F_FULLFSYNC on darwin, directory fsync elsewhere), verified on real Windows hardware. Also restores Go 1.16 buildability (legacy build-tag pairs, 1.16-compatible test code). Otherwise identical to 1.0.14: guided-scan directory-ID corruption fix (regenerate c4m files made with c4 id --continue on ≤1.0.13), bottom-up dir IDs (O(2^depth) → O(N)), path-keyed diff, null-timestamp rendering, safety defaults (pre-state capture with verbatim revert, protected paths, self-capturing snapshots), and the batch-barrier durability default with no flags (ingest ~180s → ~4.3s, materialize ~171s → ~4.4s on a 20k-file tree)."
+    },
     "1.0.14": {
       "date": "2026-07-09",
       "components": {
@@ -14,7 +28,7 @@
         "libc4":          { "version": "1.0.14", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
         "c4-containers":  { "version": "1.0.14", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
       },
-      "notes": "Correctness/safety/perf patch. CRITICAL: c4m files produced by guided scans (c4 id --continue) on ≤1.0.13 have wrong directory IDs (the empty-input ID was written for every directory entry) and should be regenerated; file IDs were unaffected. Directory C4 IDs are now computed bottom-up, which also fixes O(2^depth) deep-tree scans (~93s → ~0.007s at depth 20). c4m.Diff keys entries by full path. Null timestamps render as - in structure mode. Safety defaults: c4 patch reconcile forms capture the destination's pre-state durably before applying and print a verbatim revert command; protected-path support closes a data-loss hazard (an unguarded patch could delete .git); snapshots are self-capturing (c4 cat <id> reproduces the manifest from the store alone). Performance: snapshot ingest ~180s → ~4.3s and materialize ~171s → ~4.4s on a 20k-file/105MB tree via the batch durability barrier — now the only durability behavior; the --no-fsync/--durable flags are removed. c4 gc (never released) was withdrawn before shipping. Only c4 has substantive changes; other components ship version-lockstep."
+      "notes": "SUPERSEDED same-day by 1.0.15 (Windows batch-barrier fix). Correctness/safety/perf patch. CRITICAL: c4m files produced by guided scans (c4 id --continue) on ≤1.0.13 have wrong directory IDs (the empty-input ID was written for every directory entry) and should be regenerated; file IDs were unaffected. Directory C4 IDs are now computed bottom-up, which also fixes O(2^depth) deep-tree scans (~93s → ~0.007s at depth 20). c4m.Diff keys entries by full path. Null timestamps render as - in structure mode. Safety defaults: c4 patch reconcile forms capture the destination's pre-state durably before applying and print a verbatim revert command; protected-path support closes a data-loss hazard (an unguarded patch could delete .git); snapshots are self-capturing (c4 cat <id> reproduces the manifest from the store alone). Performance: snapshot ingest ~180s → ~4.3s and materialize ~171s → ~4.4s on a 20k-file/105MB tree via the batch durability barrier — now the only durability behavior; the --no-fsync/--durable flags are removed. c4 gc (never released) was withdrawn before shipping. Only c4 has substantive changes; other components ship version-lockstep."
     },
     "1.0.13": {
       "date": "2026-05-15",
