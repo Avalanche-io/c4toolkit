@@ -1,7 +1,21 @@
 {
   "description": "C4 suite release manifest — maps suite versions to component versions",
-  "latest": "1.0.15",
+  "latest": "1.0.16",
   "releases": {
+    "1.0.16": {
+      "date": "2026-07-10",
+      "components": {
+        "c4":             { "version": "1.0.16", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
+        "c4sh":           { "version": "1.0.16", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
+        "c4git":          { "version": "1.0.16", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
+        "c4py":           { "version": "1.0.16", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
+        "c4ts":           { "version": "1.0.16", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
+        "c4-swift":       { "version": "1.0.16", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
+        "libc4":          { "version": "1.0.16", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
+        "c4-containers":  { "version": "1.0.16", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+      },
+      "notes": "Correctness patch: three defects found by adversarial review of the shipped binary. (1) Durability ordering — batch-mode store objects were renamed to their final hash names before the end-of-command device barrier, so a power cut could leave a torn object at a valid name that a later run's write-skip would adopt silently; objects now publish only after the barrier, so presence at a hash name always implies bytes on stable media. (2) c4 log resolved the whole patch chain from scratch per section (super-quadratic; 1000 sections did not finish) — now resolves incrementally (1000 sections ~5s). (3) With sequence folding (-S), stored snapshots silently contained none of their frames because folded pattern names are not files; folded entries now expand to their members at store time. Only c4 has substantive changes; other components ship version-lockstep."
+    },
     "1.0.15": {
       "date": "2026-07-09",
       "components": {
