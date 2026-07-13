@@ -26,6 +26,25 @@ workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
 
 Each component has its own version. A suite release bundles specific component versions that are tested together. The version matrix lives in `releases.json`.
 
+## Versioning policy (permanent)
+
+- **The major is frozen at 1 — there will be no v2.** Go's import
+  rules make v2+ a repo-wide import-path migration (`/v2` suffix on
+  the core module and every dependent). That cost is never paid.
+  Consequently the Go module API must stay backward-compatible at all
+  times.
+- **Minor = the contract moved.** Under a frozen major, a minor
+  release is this suite's major: anything that breaks the CLI machine
+  contract, changes defaults, removes or repurposes flags or verbs,
+  or changes what existing commands print ships ONLY in a minor,
+  flagged in the changelog with migration notes.
+- **Patch = compatible.** Fixes and strictly additive changes only.
+  A patch must be safe to auto-upgrade blind (`brew upgrade`); it
+  must never break a script.
+- Version numbers are contract signals, not launch vehicles: product
+  or marketing milestones are not reserved a number in advance — they
+  take whatever minor is next when they land.
+
 ```bash
 # Validate all components are tagged and tests pass
 ./scripts/validate.sh 1.0.12
