@@ -164,14 +164,38 @@ npm install @avalanche-io/c4
 .package(url: \"https://github.com/Avalanche-io/c4-swift.git\", from: \"$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"c4-swift\"].version" "$RELEASES")\")
 \`\`\`"
 
+    # The release creates this repository's tag. Without an explicit
+    # target, gh tags whatever main is on GitHub at that moment, which
+    # put v1.0.13 through v1.0.16 on the previous version's bump commit.
+    # So the bump commit must already be pushed, and the tag goes on it.
+    if [ "$(jq -r .latest "$RELEASES")" != "$SUITE_VERSION" ]; then
+        echo "Error: releases.json latest is not ${SUITE_VERSION}; commit the bump first" >&2
+        exit 1
+    fi
+    git fetch -q origin main
+    TARGET=$(git rev-parse HEAD)
+    if [ "$TARGET" != "$(git rev-parse origin/main)" ]; then
+        echo "Error: HEAD is not origin/main; push the bump commit first" >&2
+        exit 1
+    fi
+
     echo "  Creating GitHub release..."
     gh release create "v${SUITE_VERSION}" \
         --repo Avalanche-io/c4toolkit \
+        --target "$TARGET" \
         --title "C4 Suite ${SUITE_VERSION}" \
         --notes "$BODY" \
         dist/${SUITE_VERSION}/*.tar.gz \
         dist/${SUITE_VERSION}/*.zip \
         dist/${SUITE_VERSION}/checksums.txt
+
+    git fetch -q origin "refs/tags/v${SUITE_VERSION}:refs/tags/v${SUITE_VERSION}"
+    TAGGED=$(git show "v${SUITE_VERSION}:releases.json" | jq -r .latest)
+    if [ "$TAGGED" != "$SUITE_VERSION" ]; then
+        echo "Error: tag v${SUITE_VERSION} carries releases.json latest=${TAGGED}" >&2
+        exit 1
+    fi
+    echo "  Tag v${SUITE_VERSION} verified on the bump commit"
 fi
 echo ""
 
