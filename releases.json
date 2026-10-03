@@ -1,7 +1,21 @@
 {
   "description": "C4 suite release manifest — maps suite versions to component versions",
-  "latest": "1.0.16",
+  "latest": "1.0.17",
   "releases": {
+    "1.0.17": {
+      "date": "2026-10-02",
+      "components": {
+        "c4":             { "version": "1.0.17", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
+        "c4sh":           { "version": "1.0.17", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
+        "c4git":          { "version": "1.0.17", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
+        "c4py":           { "version": "1.0.17", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
+        "c4ts":           { "version": "1.0.17", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
+        "c4-swift":       { "version": "1.0.17", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
+        "libc4":          { "version": "1.0.17", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
+        "c4-containers":  { "version": "1.0.17", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+      },
+      "notes": "Correctness and safety patch; IDs are unchanged. (1) c4 id -s re-serialized any file whose content parsed as c4m, so the store held different bytes than the disk and the original was unrecoverable (#43); files are now stored exactly as read and c4 cat returns stored bytes verbatim. Trees containing c4m files snapshotted with <= 1.0.16 should be re-snapshotted. (2) c4 patch <c4m> <dir> followed symbolic links already in the destination and could write outside it; every write is now confined to the destination and refused through a link. (3) Scanning a symlink cycle (up -> ..) crashed with a stack overflow; the link now gets a null ID. (4) -S snapshots now store the folded ID-list object (#45); patch still cannot expand folded entries and refuses them as in 1.0.16 instead of writing the ID list as a file. Only c4 has substantive changes; other components ship version-lockstep from their 1.0.16 code."
+    },
     "1.0.16": {
       "date": "2026-07-10",
       "components": {
