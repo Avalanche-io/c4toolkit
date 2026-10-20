@@ -1,146 +1,621 @@
 {
-  "description": "C4 suite release manifest — maps suite versions to component versions",
+  "description": "C4 suite release manifest \u2014 maps suite versions to component versions",
   "latest": "1.0.18",
   "releases": {
     "1.0.18": {
       "date": "2026-10-03",
       "components": {
-        "c4":             { "version": "1.0.18", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.18", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.18", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.18", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.18", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.18", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.18", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.18", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.18",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
       "notes": "Verification patch; IDs are unchanged. Eight defects where c4 trusted metadata or stored names instead of rechecking bytes, found while dogfooding c4 to sync live state between two machines. (1) c4 diff <c4m> <dir> trusted size+mtime, so a corrupted copy that kept both reported no differences; the directory side is now always hashed. (2) Scans now settle racy files (git's racy rule), so a same-size rewrite within the second a scan saw a file is never recorded with stale content. (3) c4 patch hashes content as it copies from the store or a --source directory and refuses bytes that do not match their ID, leaving the destination untouched; it now exits 1 when any operation fails. (4) c4 cat verifies an object before printing it. (5) Stores written on case-insensitive filesystems (macOS) are readable on Linux. (6) c4 patch restores nested directory times, so c4 id after a sync matches the target. (7) c4 diff | c4 paths lists changed paths. (8) Malformed c4m exits 1 instead of panicking. Only c4 has substantive changes; other components ship version-lockstep from their 1.0.17 code."
     },
     "1.0.17": {
       "date": "2026-10-02",
       "components": {
-        "c4":             { "version": "1.0.17", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.17", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.17", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.17", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.17", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.17", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.17", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.17", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.17",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
       "notes": "Correctness and safety patch; IDs are unchanged. (1) c4 id -s re-serialized any file whose content parsed as c4m, so the store held different bytes than the disk and the original was unrecoverable (#43); files are now stored exactly as read and c4 cat returns stored bytes verbatim. Trees containing c4m files snapshotted with <= 1.0.16 should be re-snapshotted. (2) c4 patch <c4m> <dir> followed symbolic links already in the destination and could write outside it; every write is now confined to the destination and refused through a link. (3) Scanning a symlink cycle (up -> ..) crashed with a stack overflow; the link now gets a null ID. (4) -S snapshots now store the folded ID-list object (#45); patch still cannot expand folded entries and refuses them as in 1.0.16 instead of writing the ID list as a file. Only c4 has substantive changes; other components ship version-lockstep from their 1.0.16 code."
     },
     "1.0.16": {
       "date": "2026-07-10",
       "components": {
-        "c4":             { "version": "1.0.16", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.16", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.16", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.16", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.16", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.16", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.16", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.16", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.16",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
-      "notes": "Correctness patch: three defects found by adversarial review of the shipped binary. (1) Durability ordering — batch-mode store objects were renamed to their final hash names before the end-of-command device barrier, so a power cut could leave a torn object at a valid name that a later run's write-skip would adopt silently; objects now publish only after the barrier, so presence at a hash name always implies bytes on stable media. (2) c4 log resolved the whole patch chain from scratch per section (super-quadratic; 1000 sections did not finish) — now resolves incrementally (1000 sections ~5s). (3) With sequence folding (-S), stored snapshots silently contained none of their frames because folded pattern names are not files; folded entries now expand to their members at store time. Only c4 has substantive changes; other components ship version-lockstep."
+      "notes": "Correctness patch: three defects found by adversarial review of the shipped binary. (1) Durability ordering \u2014 batch-mode store objects were renamed to their final hash names before the end-of-command device barrier, so a power cut could leave a torn object at a valid name that a later run's write-skip would adopt silently; objects now publish only after the barrier, so presence at a hash name always implies bytes on stable media. (2) c4 log resolved the whole patch chain from scratch per section (super-quadratic; 1000 sections did not finish) \u2014 now resolves incrementally (1000 sections ~5s). (3) With sequence folding (-S), stored snapshots silently contained none of their frames because folded pattern names are not files; folded entries now expand to their members at store time. Only c4 has substantive changes; other components ship version-lockstep."
     },
     "1.0.15": {
       "date": "2026-07-09",
       "components": {
-        "c4":             { "version": "1.0.15", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.15", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.15", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.15", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.15", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.15", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.15", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.15", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.15",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
-      "notes": "Same-day supersede of 1.0.14 (which shipped with a Windows defect: the batch durability barrier fsync'd directory handles, which Windows refuses — spurious 'Access is denied' warnings on every c4 id -s / c4 patch and four failing store tests; no data loss). The barrier now routes through a platform-conditional store.SyncDir (no-op on Windows, F_FULLFSYNC on darwin, directory fsync elsewhere), verified on real Windows hardware. Also restores Go 1.16 buildability (legacy build-tag pairs, 1.16-compatible test code). Otherwise identical to 1.0.14: guided-scan directory-ID corruption fix (regenerate c4m files made with c4 id --continue on ≤1.0.13), bottom-up dir IDs (O(2^depth) → O(N)), path-keyed diff, null-timestamp rendering, safety defaults (pre-state capture with verbatim revert, protected paths, self-capturing snapshots), and the batch-barrier durability default with no flags (ingest ~180s → ~4.3s, materialize ~171s → ~4.4s on a 20k-file tree)."
+      "notes": "Same-day supersede of 1.0.14 (which shipped with a Windows defect: the batch durability barrier fsync'd directory handles, which Windows refuses \u2014 spurious 'Access is denied' warnings on every c4 id -s / c4 patch and four failing store tests; no data loss). The barrier now routes through a platform-conditional store.SyncDir (no-op on Windows, F_FULLFSYNC on darwin, directory fsync elsewhere), verified on real Windows hardware. Also restores Go 1.16 buildability (legacy build-tag pairs, 1.16-compatible test code). Otherwise identical to 1.0.14: guided-scan directory-ID corruption fix (regenerate c4m files made with c4 id --continue on \u22641.0.13), bottom-up dir IDs (O(2^depth) \u2192 O(N)), path-keyed diff, null-timestamp rendering, safety defaults (pre-state capture with verbatim revert, protected paths, self-capturing snapshots), and the batch-barrier durability default with no flags (ingest ~180s \u2192 ~4.3s, materialize ~171s \u2192 ~4.4s on a 20k-file tree)."
     },
     "1.0.14": {
       "date": "2026-07-09",
       "components": {
-        "c4":             { "version": "1.0.14", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.14", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.14", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.14", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.14", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.14", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.14", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.14", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.14",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
-      "notes": "SUPERSEDED same-day by 1.0.15 (Windows batch-barrier fix). Correctness/safety/perf patch. CRITICAL: c4m files produced by guided scans (c4 id --continue) on ≤1.0.13 have wrong directory IDs (the empty-input ID was written for every directory entry) and should be regenerated; file IDs were unaffected. Directory C4 IDs are now computed bottom-up, which also fixes O(2^depth) deep-tree scans (~93s → ~0.007s at depth 20). c4m.Diff keys entries by full path. Null timestamps render as - in structure mode. Safety defaults: c4 patch reconcile forms capture the destination's pre-state durably before applying and print a verbatim revert command; protected-path support closes a data-loss hazard (an unguarded patch could delete .git); snapshots are self-capturing (c4 cat <id> reproduces the manifest from the store alone). Performance: snapshot ingest ~180s → ~4.3s and materialize ~171s → ~4.4s on a 20k-file/105MB tree via the batch durability barrier — now the only durability behavior; the --no-fsync/--durable flags are removed. c4 gc (never released) was withdrawn before shipping. Only c4 has substantive changes; other components ship version-lockstep."
+      "notes": "SUPERSEDED same-day by 1.0.15 (Windows batch-barrier fix). Correctness/safety/perf patch. CRITICAL: c4m files produced by guided scans (c4 id --continue) on \u22641.0.13 have wrong directory IDs (the empty-input ID was written for every directory entry) and should be regenerated; file IDs were unaffected. Directory C4 IDs are now computed bottom-up, which also fixes O(2^depth) deep-tree scans (~93s \u2192 ~0.007s at depth 20). c4m.Diff keys entries by full path. Null timestamps render as - in structure mode. Safety defaults: c4 patch reconcile forms capture the destination's pre-state durably before applying and print a verbatim revert command; protected-path support closes a data-loss hazard (an unguarded patch could delete .git); snapshots are self-capturing (c4 cat <id> reproduces the manifest from the store alone). Performance: snapshot ingest ~180s \u2192 ~4.3s and materialize ~171s \u2192 ~4.4s on a 20k-file/105MB tree via the batch durability barrier \u2014 now the only durability behavior; the --no-fsync/--durable flags are removed. c4 gc (never released) was withdrawn before shipping. Only c4 has substantive changes; other components ship version-lockstep."
     },
     "1.0.13": {
       "date": "2026-05-15",
       "components": {
-        "c4":             { "version": "1.0.13", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.13", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.13", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.13", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.13", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.13", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.13", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.13", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.13",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
-      "notes": "Scan performance: O(D × N) propagateMetadata replaced with single-pass depth-stack (5.14M-entry trees went from 16-20 min hang to 2m 24s). Plus six API additions in c4: c4m.PropagateMetadata exported, c4m.WriteCanonical, scan.WithProgress, scan.WithMaxConcurrency, scan.WithContext, scan.WithEntryStream; progressive scanner propagation wired."
+      "notes": "Scan performance: O(D \u00d7 N) propagateMetadata replaced with single-pass depth-stack (5.14M-entry trees went from 16-20 min hang to 2m 24s). Plus six API additions in c4: c4m.PropagateMetadata exported, c4m.WriteCanonical, scan.WithProgress, scan.WithMaxConcurrency, scan.WithContext, scan.WithEntryStream; progressive scanner propagation wired."
     },
     "1.0.12": {
       "date": "2026-03-26",
       "components": {
-        "c4":             { "version": "1.0.12", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.12", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.12", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.12", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.12", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.12", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.12", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.12", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.12",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
       "notes": "Version bump to 1.0.12 across all components."
     },
     "1.0.11": {
       "date": "2026-03-26",
       "components": {
-        "c4":             { "version": "1.0.11", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.11", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.11", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.11", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.11", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.11", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "1.0.11", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.11", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.11",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
       "notes": "Version bump to 1.0.11 across all components."
     },
     "1.0.10": {
       "date": "2026-03-26",
       "components": {
-        "c4":             { "version": "1.0.10", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.10", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.0",  "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.0",  "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.10", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.10", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "0.1.0",  "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.10", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.10",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.10",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.0",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.0",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.10",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.10",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.10",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
       "notes": "Version alignment across all components. c4ts and c4-swift brought to 1.0.10."
     },
     "1.0.6": {
       "date": "2026-03-22",
       "components": {
-        "c4":             { "version": "1.0.6", "repo": "Avalanche-io/c4",             "lang": "go",     "build": "cmd/c4" },
-        "c4sh":           { "version": "1.0.6", "repo": "Avalanche-io/c4sh",           "lang": "go",     "build": "." },
-        "c4git":          { "version": "1.0.0", "repo": "Avalanche-io/c4git",          "lang": "go",     "build": "cmd/c4git" },
-        "c4py":           { "version": "1.0.0", "repo": "Avalanche-io/c4py",           "lang": "python", "publish": "pypi" },
-        "c4ts":           { "version": "1.0.5", "repo": "Avalanche-io/c4ts",           "lang": "typescript", "publish": "npm" },
-        "c4-swift":       { "version": "1.0.5", "repo": "Avalanche-io/c4-swift",       "lang": "swift",  "publish": "spm" },
-        "libc4":          { "version": "0.1.0", "repo": "Avalanche-io/libc4",          "lang": "c",      "publish": "source" },
-        "c4-containers":  { "version": "1.0.6", "repo": "Avalanche-io/c4-containers",  "lang": "docker", "publish": "ghcr" }
+        "c4": {
+          "version": "1.0.6",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.6",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.0",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.0",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.5",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.5",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.6",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        }
       },
       "notes": "Initial coordinated release. TypeScript and Swift implementations, c4sh UX improvements, scan-everything fix."
+    },
+    "1.1.0": {
+      "date": null,
+      "status": "planned: the v1.1 suite from each repo's main line; versions and date are set at release time",
+      "components": {
+        "c4": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.1.0",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        },
+        "c4-farm": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-farm",
+          "test": "./cmd/c4-farm/... ./internal/farmcli/...",
+          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way"
+        },
+        "c4-agent": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-agent",
+          "goos": [
+            "darwin",
+            "linux"
+          ],
+          "test": "./cmd/c4-agent/...",
+          "note": "the host runner; macOS and Linux only"
+        }
+      },
+      "notes": "The v1.1 suite. c4: external tool dispatch (c4 farm runs c4-farm), natural order compares digit runs of any length, and the rest of CHANGELOG.md Unreleased. The suite archives and the Homebrew formula bring c4-farm and c4-agent from c4-operator at the pinned tag; the formula moves to Avalanche-io/homebrew-tap."
     }
   }
 }

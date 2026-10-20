@@ -147,8 +147,8 @@ ${NOTES}
 ## Install
 
 \`\`\`bash
-# Homebrew (macOS/Linux)
-brew install mrjoshuak/tap/c4
+# Homebrew (macOS/Linux): c4, c4sh, c4git, and the farm tools c4-farm and c4-agent
+brew install avalanche-io/tap/c4
 
 # Go tools
 go install github.com/Avalanche-io/c4/cmd/c4@v$(jq -r ".releases[\"${SUITE_VERSION}\"].components.c4.version" "$RELEASES")

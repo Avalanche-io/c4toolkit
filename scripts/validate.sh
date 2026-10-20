@@ -43,8 +43,10 @@ while IFS=' ' read -r name version repo lang; do
     if [ "$lang" = "go" ]; then
         CLONEDIR=$(mktemp -d)
         if git clone --depth 1 --branch "v${version}" "https://github.com/${repo}.git" "$CLONEDIR" 2>/dev/null; then
-            echo -n "  tests: "
-            if (cd "$CLONEDIR" && go test ./... 2>&1) > /dev/null 2>&1; then
+            # Optional "test": the packages to test (c4-operator's full suite needs a cluster)
+            TEST_PKGS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${name}\"].test // \"./...\"" "$RELEASES")
+            echo -n "  tests (${TEST_PKGS}): "
+            if (cd "$CLONEDIR" && go test $TEST_PKGS 2>&1) > /dev/null 2>&1; then
                 echo "PASS"
             else
                 echo "FAIL"

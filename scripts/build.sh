@@ -8,6 +8,10 @@ set -euo pipefail
 # Reads component versions from releases.json, clones each Go tool
 # at its tagged version, cross-compiles for all target platforms,
 # and produces archives in dist/<suite-version>/.
+#
+# Several components may come from one repository (c4-farm and c4-agent
+# are both built from c4-operator at its pinned tag); each is cloned and
+# built on its own, and "goos" limits the platforms a component ships on.
 
 SUITE_VERSION="${1:?Usage: $0 <suite-version>}"
 DIST="dist/${SUITE_VERSION}"
@@ -58,9 +62,16 @@ for tool in $GO_TOOLS; do
         continue
     }
 
+    # Optional "goos": the platforms this tool ships on (c4-agent has no Windows build)
+    goos_filter=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].goos // [] | join(\" \")" "$RELEASES")
+
     for platform in "${PLATFORMS[@]}"; do
         IFS='/' read -r os arch <<< "$platform"
         ext=""; [ "$os" = "windows" ] && ext=".exe"
+        if [ -n "$goos_filter" ] && ! [[ " $goos_filter " == *" $os "* ]]; then
+            echo "  ${os}/${arch}: not shipped"
+            continue
+        fi
 
         echo "  ${os}/${arch}"
         outdir="${DIST}/${tool}_v${version}_${os}_${arch}"

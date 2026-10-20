@@ -22,6 +22,12 @@ workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
 | [libc4](https://github.com/Avalanche-io/libc4) | 1.0.18 | C | build from source |
 | [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.18 | Docker | `ghcr.io/avalanche-io/c4` |
 
+From the v1.1 suite (`releases.json` entry `1.1.0`, planned), two more
+components are built from [c4-operator](https://github.com/Avalanche-io/c4-operator)
+at its pinned tag and ship in the suite archives: `c4-farm` (all
+platforms) and `c4-agent` (macOS and Linux). `c4 farm ...` runs
+`c4-farm`.
+
 ## How it works
 
 Each component has its own version. A suite release bundles specific component versions that are tested together. The version matrix lives in `releases.json`.
@@ -64,10 +70,15 @@ Each component has its own version. A suite release bundles specific component v
 ### Homebrew (macOS / Linux)
 
 ```bash
-brew install mrjoshuak/tap/c4
+brew install avalanche-io/tap/c4
 ```
 
-Installs c4, c4sh, and c4git. Updated each suite release.
+Installs c4, c4sh and c4git from the suite bundle, and depends on the
+tap's `c4-farm` and `c4-agent` formulas (published by c4-operator's
+goreleaser), so `c4 farm` works after the one install. Updated each
+suite release. Suite 1.0.18 and earlier are in `mrjoshuak/tap/c4`;
+that tap's `tap_migrations.json` (`homebrew/tap_migrations.json` here)
+sends `brew upgrade` to the new tap.
 
 ### Binary downloads
 
@@ -120,8 +131,10 @@ The full process is documented at workspace-level
 5. `gh release create v<version> dist/<version>/*` — uploads to the
    c4toolkit GitHub releases page.
 6. `./scripts/homebrew.sh <version>` — regenerates `homebrew/c4.rb`.
-7. Copy that formula to `mrjoshuak/homebrew-tap/Formula/c4.rb`, commit
-   `Update c4 formula to v<version>`, push.
+7. Copy that formula to `Avalanche-io/homebrew-tap/Formula/c4.rb`, commit
+   `Update c4 formula to v<version>`, push. The tap's `c4-farm` and
+   `c4-agent` formulas are c4-operator's; the suite's `releases.json`
+   pins the c4-operator tag the suite was tested with.
 8. Verify with the commands in workspace-level `RELEASE.md`.
 
 PyPI (`c4py`) and npm (`@avalanche-io/c4`, `@avalanche-io/c4-node`)

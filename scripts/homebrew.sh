@@ -6,7 +6,14 @@ set -euo pipefail
 # Usage: ./scripts/homebrew.sh <suite-version>
 #
 # Reads checksums from dist/<suite-version>/checksums.txt and generates
-# homebrew/c4.rb with URLs and SHA256 hashes for the suite bundles.
+# homebrew/c4.rb with URLs and SHA256 hashes for the suite bundles, for
+# Avalanche-io/homebrew-tap (Formula/c4.rb). The formula installs the
+# suite's own Go tools and depends on the tap's c4-farm and c4-agent
+# formulas, which c4-operator's goreleaser publishes, so `brew install
+# avalanche-io/tap/c4` ends with a working `c4 farm`. The c4-farm and
+# c4-agent binaries in the suite bundle are for the archive downloads;
+# the formula leaves them to their own formulas so the two never
+# collide on bin/.
 
 SUITE_VERSION="${1:?Usage: $0 <suite-version>}"
 DIST="dist/${SUITE_VERSION}"
@@ -28,7 +35,14 @@ BASE_URL="https://github.com/Avalanche-io/c4toolkit/releases/download/v${SUITE_V
 GO_TOOLS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | select(.value.lang == \"go\") | .key" "$RELEASES" 2>/dev/null || echo "c4")
 
 INSTALL_LINES=""
+DEPENDS_LINES=""
 for tool in $GO_TOOLS; do
+    repo=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].repo" "$RELEASES")
+    if [ "$repo" = "Avalanche-io/c4-operator" ]; then
+        DEPENDS_LINES="${DEPENDS_LINES}  depends_on \"avalanche-io/tap/${tool}\"
+"
+        continue
+    fi
     INSTALL_LINES="${INSTALL_LINES}    bin.install \"${tool}\"
 "
 done
@@ -42,6 +56,7 @@ class C4 < Formula
   version "${SUITE_VERSION}"
   license "Apache-2.0"
 
+${DEPENDS_LINES}
   on_macos do
     if Hardware::CPU.arm?
       url "${BASE_URL}/c4-suite_v${SUITE_VERSION}_darwin_arm64.tar.gz"
@@ -67,6 +82,7 @@ ${INSTALL_LINES}  end
 
   test do
     assert_match "c4 ", shell_output("#{bin}/c4 version")
+    assert_match "c4 farm", shell_output("#{bin}/c4 help")
   end
 end
 RUBY
