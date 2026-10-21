@@ -596,6 +596,92 @@
       },
       "notes": "Patch. c4m canonical order: digit runs compare as integers of any length, never through a 64-bit or double parse, so a tree whose names hold runs of 20 or more digits has one ID instead of one per run (c4 Go, c4ts, c4-swift fixed; c4py was already right); text segments compare whole, a1 < ab (libc4 fixed). Shared vectors c4m/testdata/natural_sort_vectors.json in every implementation. Names with runs of 18 digits or fewer sort exactly as before, so their IDs are unchanged. Also c4git: the smudge filter passed through only the first 256 bytes of a non-pointer blob (data loss on checkout), fixed. c4-containers: README names C4_S3_ENDPOINT; s3worker passes S3_ENDPOINT through. Other components ship version-lockstep."
     },
+    "1.0.20": {
+      "date": null,
+      "status": "planned: cut once c4-operator v0.1.0 is published and its formulas are in mrjoshuak/tap",
+      "components": {
+        "c4": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.20",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        },
+        "c4-farm": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-farm",
+          "test": "./cmd/c4-farm/... ./internal/farmcli/...",
+          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-farm_{version}_{os}_{arch}"
+        },
+        "c4-agent": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-agent",
+          "goos": [
+            "darwin",
+            "linux"
+          ],
+          "test": "./cmd/c4-agent/...",
+          "note": "the host runner; macOS and Linux only. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-agent_{version}_{os}_{arch}"
+        },
+        "c4-unit": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-unit",
+          "asset": "c4-unit_{version}_{os}_{arch}",
+          "test": "./cmd/c4-unit/...",
+          "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
+        }
+      },
+      "notes": "Patch. c4: `c4 <name>` runs `c4-<name>` from PATH when no file or directory of that name exists, and `c4 help` lists the installed tools; nothing that works on 1.0.19 changes meaning. The suite archives and the Homebrew formula now bring the farm tools from c4-operator v0.1.0: c4-farm (all platforms), c4-agent and c4-unit (c4-agent on macOS and Linux), taken from that release's own archives; `brew install mrjoshuak/tap/c4` installs c4, c4sh, c4git and, through the tap's c4-farm and c4-agent formulas, `c4 farm`. Other components ship version-lockstep."
+    },
     "1.1.0": {
       "date": null,
       "status": "planned: the v1.1 suite from each repo's main line; versions and date are set at release time",
