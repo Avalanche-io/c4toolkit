@@ -39,6 +39,22 @@ while IFS=' ' read -r name version repo lang; do
         ERRORS=$((ERRORS + 1))
     fi
 
+    # Components taken from their own GitHub release ("asset") are checked
+    # there: the archive must exist for darwin/arm64 (the rest at build time).
+    ASSET_TPL=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${name}\"].asset // empty" "$RELEASES")
+    if [ -n "$ASSET_TPL" ]; then
+        asset=${ASSET_TPL//\{version\}/$version}; asset=${asset//\{os\}/darwin}; asset=${asset//\{arch\}/arm64}
+        url="https://github.com/${repo}/releases/download/v${version}/${asset}.tar.gz"
+        if curl -fsSLI -o /dev/null "$url"; then
+            echo "  release asset: OK (${asset}.tar.gz)"
+        else
+            echo "  release asset: MISSING ${url}"
+            ERRORS=$((ERRORS + 1))
+        fi
+        echo ""
+        continue
+    fi
+
     # For Go tools, clone and run tests
     if [ "$lang" = "go" ]; then
         CLONEDIR=$(mktemp -d)

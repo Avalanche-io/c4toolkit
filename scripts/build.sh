@@ -57,14 +57,47 @@ for tool in $GO_TOOLS; do
 
     echo "=== ${tool} v${version} (${repo}) ==="
 
+    # Optional "asset": take the binary from the component's own GitHub
+    # release instead of building it (c4-farm, c4-agent and c4-unit come from
+    # c4-operator's goreleaser archives, which embed what its release workflow
+    # produced). {version} {os} {arch} are substituted; goreleaser archives
+    # are .tar.gz, .zip on Windows.
+    asset_tpl=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].asset // empty" "$RELEASES")
+    goos_filter=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].goos // [] | join(\" \")" "$RELEASES")
+    if [ -n "$asset_tpl" ]; then
+        for platform in "${PLATFORMS[@]}"; do
+            IFS='/' read -r os arch <<< "$platform"
+            ext=""; [ "$os" = "windows" ] && ext=".exe"
+            if [ -n "$goos_filter" ] && ! [[ " $goos_filter " == *" $os "* ]]; then
+                echo "  ${os}/${arch}: not shipped"
+                continue
+            fi
+            asset=${asset_tpl//\{version\}/$version}; asset=${asset//\{os\}/$os}; asset=${asset//\{arch\}/$arch}
+            archive_ext=".tar.gz"; [ "$os" = "windows" ] && archive_ext=".zip"
+            url="https://github.com/${repo}/releases/download/v${version}/${asset}${archive_ext}"
+            outdir="${DIST}/${tool}_v${version}_${os}_${arch}"
+            mkdir -p "$outdir" "$WORKDIR/$tool"
+            echo "  ${os}/${arch} <- ${asset}${archive_ext}"
+            if ! curl -fsSL -o "$WORKDIR/$tool/${asset}${archive_ext}" "$url"; then
+                echo "    FAIL: ${url}" >&2
+                rm -rf "$outdir"
+                continue
+            fi
+            if [ "$archive_ext" = ".zip" ]; then
+                unzip -qo "$WORKDIR/$tool/${asset}${archive_ext}" "${tool}${ext}" -d "$outdir"
+            else
+                tar xzf "$WORKDIR/$tool/${asset}${archive_ext}" -C "$outdir" "${tool}${ext}"
+            fi
+        done
+        continue
+    fi
+
     git clone --depth 1 --branch "v${version}" "https://github.com/${repo}.git" "$WORKDIR/$tool" 2>/dev/null || {
         echo "  SKIP: tag v${version} not found" >&2
         continue
     }
 
-    # Optional "goos": the platforms this tool ships on (c4-agent has no Windows build)
-    goos_filter=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].goos // [] | join(\" \")" "$RELEASES")
-
+    # "goos" (read above): the platforms this tool ships on
     for platform in "${PLATFORMS[@]}"; do
         IFS='/' read -r os arch <<< "$platform"
         ext=""; [ "$os" = "windows" ] && ext=".exe"

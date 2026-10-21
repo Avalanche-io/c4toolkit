@@ -654,7 +654,8 @@
           "lang": "go",
           "build": "cmd/c4-farm",
           "test": "./cmd/c4-farm/... ./internal/farmcli/...",
-          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way"
+          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-farm_{version}_{os}_{arch}"
         },
         "c4-agent": {
           "version": "0.1.0",
@@ -666,7 +667,17 @@
             "linux"
           ],
           "test": "./cmd/c4-agent/...",
-          "note": "the host runner; macOS and Linux only"
+          "note": "the host runner; macOS and Linux only. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-agent_{version}_{os}_{arch}"
+        },
+        "c4-unit": {
+          "version": "0.1.0",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-unit",
+          "asset": "c4-unit_{version}_{os}_{arch}",
+          "test": "./cmd/c4-unit/...",
+          "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
         }
       },
       "notes": "The v1.1 suite. c4: external tool dispatch (c4 farm runs c4-farm), natural order compares digit runs of any length, and the rest of CHANGELOG.md Unreleased. The suite archives and the Homebrew formula bring c4-farm and c4-agent from c4-operator at the pinned tag; the formula moves to Avalanche-io/homebrew-tap."
