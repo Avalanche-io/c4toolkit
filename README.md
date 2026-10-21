@@ -9,18 +9,18 @@ together, or it doesn't ship.
 For coordination workflow + lessons learned across releases, see the
 workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
 
-## Suite Version 1.0.18
+## Suite Version 1.0.19
 
 | Component | Version | Language | Install |
 |-----------|---------|----------|---------|
-| [c4](https://github.com/Avalanche-io/c4) | 1.0.18 | Go | `brew install mrjoshuak/tap/c4` or binary download |
-| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.18 | Go | included in Homebrew formula |
-| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.18 | Go | included in Homebrew formula |
-| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.18 | Python | `pip install c4py` |
-| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.18 | TypeScript | `npm install @avalanche-io/c4` |
-| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.18 | Swift | SPM: `from: "1.0.18"` |
-| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.18 | C | build from source |
-| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.18 | Docker | `ghcr.io/avalanche-io/c4` |
+| [c4](https://github.com/Avalanche-io/c4) | 1.0.19 | Go | `brew install mrjoshuak/tap/c4` or binary download |
+| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.19 | Go | included in Homebrew formula |
+| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.19 | Go | included in Homebrew formula |
+| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.19 | Python | `pip install c4py` |
+| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.19 | TypeScript | `npm install @avalanche-io/c4` |
+| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.19 | Swift | SPM: `from: "1.0.19"` |
+| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.19 | C | build from source |
+| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.19 | Docker | `ghcr.io/avalanche-io/c4` |
 
 From the v1.1 suite (`releases.json` entry `1.1.0`, planned), two more
 components are built from [c4-operator](https://github.com/Avalanche-io/c4-operator)
