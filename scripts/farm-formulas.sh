@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Generate the Homebrew formulas for the farm tools from a c4-operator
-# release, for Avalanche-io/homebrew-tap: homebrew/c4-farm.rb and
+# release, for mrjoshuak/homebrew-tap: homebrew/c4-farm.rb and
 # homebrew/c4-agent.rb. The formulas point at the release's own archives
 # (goreleaser's c4-farm_<v>_<os>_<arch>.tar.gz and c4-agent_...), with
 # the SHA256s from its checksums.txt.
@@ -34,7 +34,7 @@ class C4Farm < Formula
   version "${VERSION}"
   license "Apache-2.0"
 
-  depends_on "avalanche-io/tap/c4-agent"
+  depends_on "mrjoshuak/tap/c4-agent"
 
   on_macos do
     if Hardware::CPU.arm?

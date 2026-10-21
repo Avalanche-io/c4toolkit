@@ -7,10 +7,10 @@ set -euo pipefail
 #
 # Reads checksums from dist/<suite-version>/checksums.txt and generates
 # homebrew/c4.rb with URLs and SHA256 hashes for the suite bundles, for
-# Avalanche-io/homebrew-tap (Formula/c4.rb). The formula installs the
+# mrjoshuak/homebrew-tap (Formula/c4.rb). The formula installs the
 # suite's own Go tools and depends on the tap's c4-farm and c4-agent
 # formulas, which c4-operator's goreleaser publishes, so `brew install
-# avalanche-io/tap/c4` ends with a working `c4 farm`. The c4-farm and
+# mrjoshuak/tap/c4` ends with a working `c4 farm`. The c4-farm and
 # c4-agent binaries in the suite bundle are for the archive downloads;
 # the formula leaves them to their own formulas so the two never
 # collide on bin/.
@@ -40,7 +40,7 @@ FARM_TEST_LINE=""
 for tool in $GO_TOOLS; do
     repo=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].repo" "$RELEASES")
     if [ "$repo" = "Avalanche-io/c4-operator" ]; then
-        DEPENDS_LINES="${DEPENDS_LINES}  depends_on \"avalanche-io/tap/${tool}\"
+        DEPENDS_LINES="${DEPENDS_LINES}  depends_on \"mrjoshuak/tap/${tool}\"
 "
         # c4 help lists the installed tools only from the suite that ships them
         FARM_TEST_LINE='    assert_match "c4 farm", shell_output("#{bin}/c4 help")

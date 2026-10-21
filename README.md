@@ -70,15 +70,15 @@ Each component has its own version. A suite release bundles specific component v
 ### Homebrew (macOS / Linux)
 
 ```bash
-brew install avalanche-io/tap/c4
+brew install mrjoshuak/tap/c4
 ```
 
 Installs c4, c4sh and c4git from the suite bundle, and depends on the
 tap's `c4-farm` and `c4-agent` formulas (published by c4-operator's
-goreleaser), so `c4 farm` works after the one install. Updated each
-suite release. Suite 1.0.18 and earlier are in `mrjoshuak/tap/c4`;
-that tap's `tap_migrations.json` (`homebrew/tap_migrations.json` here)
-sends `brew upgrade` to the new tap.
+goreleaser, or `scripts/farm-formulas.sh` here), so `c4 farm` works
+after the one install. Updated each suite release. The tap stays
+`mrjoshuak/homebrew-tap` until Avalanche-io is tied into the service
+offering (Joshua, 2026-10-21).
 
 ### Binary downloads
 
@@ -131,7 +131,7 @@ The full process is documented at workspace-level
 5. `gh release create v<version> dist/<version>/*` — uploads to the
    c4toolkit GitHub releases page.
 6. `./scripts/homebrew.sh <version>` — regenerates `homebrew/c4.rb`.
-7. Copy that formula to `Avalanche-io/homebrew-tap/Formula/c4.rb`, commit
+7. Copy that formula to `mrjoshuak/homebrew-tap/Formula/c4.rb`, commit
    `Update c4 formula to v<version>`, push. The tap's `c4-farm` and
    `c4-agent` formulas come from the c4-operator release the suite pins
    in `releases.json`: `./scripts/farm-formulas.sh <operator-version>`
