@@ -36,11 +36,15 @@ GO_TOOLS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | se
 
 INSTALL_LINES=""
 DEPENDS_LINES=""
+FARM_TEST_LINE=""
 for tool in $GO_TOOLS; do
     repo=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${tool}\"].repo" "$RELEASES")
     if [ "$repo" = "Avalanche-io/c4-operator" ]; then
         DEPENDS_LINES="${DEPENDS_LINES}  depends_on \"avalanche-io/tap/${tool}\"
 "
+        # c4 help lists the installed tools only from the suite that ships them
+        FARM_TEST_LINE='    assert_match "c4 farm", shell_output("#{bin}/c4 help")
+'
         continue
     fi
     INSTALL_LINES="${INSTALL_LINES}    bin.install \"${tool}\"
@@ -82,8 +86,7 @@ ${INSTALL_LINES}  end
 
   test do
     assert_match "c4 ", shell_output("#{bin}/c4 version")
-    assert_match "c4 farm", shell_output("#{bin}/c4 help")
-  end
+${FARM_TEST_LINE}  end
 end
 RUBY
 
