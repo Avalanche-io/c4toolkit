@@ -133,8 +133,12 @@ The full process is documented at workspace-level
 6. `./scripts/homebrew.sh <version>` — regenerates `homebrew/c4.rb`.
 7. Copy that formula to `Avalanche-io/homebrew-tap/Formula/c4.rb`, commit
    `Update c4 formula to v<version>`, push. The tap's `c4-farm` and
-   `c4-agent` formulas are c4-operator's; the suite's `releases.json`
-   pins the c4-operator tag the suite was tested with.
+   `c4-agent` formulas come from the c4-operator release the suite pins
+   in `releases.json`: `./scripts/farm-formulas.sh <operator-version>`
+   generates `homebrew/c4-farm.rb` and `homebrew/c4-agent.rb` from that
+   release's checksums; copy them to the tap the same way (c4-operator's
+   goreleaser can also push them itself when its `HOMEBREW_TAP_TOKEN` is
+   set; either way the tap ends up with the same files).
 8. Verify with the commands in workspace-level `RELEASE.md`.
 
 PyPI (`c4py`) and npm (`@avalanche-io/c4`, `@avalanche-io/c4-node`)
