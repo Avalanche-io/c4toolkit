@@ -1,6 +1,6 @@
 {
   "description": "C4 suite release manifest \u2014 maps suite versions to component versions",
-  "latest": "1.0.18",
+  "latest": "1.0.19",
   "releases": {
     "1.0.18": {
       "date": "2026-10-03",
@@ -543,8 +543,7 @@
       "notes": "Initial coordinated release. TypeScript and Swift implementations, c4sh UX improvements, scan-everything fix."
     },
     "1.0.19": {
-      "date": null,
-      "status": "planned: cut from each repo's release/1.0.x (c4-swift from main) once Joshua says go",
+      "date": "2026-10-21",
       "components": {
         "c4": {
           "version": "1.0.19",
