@@ -20,7 +20,13 @@ BASE_URL="https://github.com/${REPO}/releases/download/v${VERSION}"
 
 SUMS=$(mktemp)
 trap 'rm -f "$SUMS"' EXIT
-curl -fsSL -o "$SUMS" "${BASE_URL}/checksums.txt"
+# CHECKSUMS=<file> uses a local copy (e.g. `gh release download v0.1.0
+# -p checksums.txt` from a draft release that is not public yet).
+if [ -n "${CHECKSUMS:-}" ]; then
+    cp "$CHECKSUMS" "$SUMS"
+else
+    curl -fsSL -o "$SUMS" "${BASE_URL}/checksums.txt"
+fi
 
 sha() { grep " $1\$" "$SUMS" | awk '{print $1}'; }
 need() { local s; s=$(sha "$1"); [ -n "$s" ] || { echo "Error: $1 not in checksums.txt" >&2; exit 1; }; echo "$s"; }
