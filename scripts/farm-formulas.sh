@@ -58,7 +58,7 @@ class C4Farm < Formula
 
   def install
     bin.install "c4-farm"
-    (share/"c4-farm/skills").install "skills/c4-farm" if File.directory?("skills/c4-farm")
+    (share/"c4-farm/skills").install "skills/c4-farm"
   end
 
   test do
@@ -95,12 +95,12 @@ class C4Agent < Formula
   end
 
   def install
-    bin.install "c4-agent"
-    bin.install "c4-unit" if File.exist?("c4-unit")
+    bin.install "c4-agent", "c4-unit"
   end
 
   test do
     system bin/"c4-agent", "help"
+    assert_match "usage: c4-unit run", shell_output("#{bin}/c4-unit 2>&1", 2)
   end
 end
 RUBY
