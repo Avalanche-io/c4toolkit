@@ -3,7 +3,6 @@ class C4 < Formula
   homepage "https://cccc.io"
   version "1.0.20"
   license "Apache-2.0"
-  conflicts_with "mrjoshuak/tap/c4-farm", "mrjoshuak/tap/c4-agent", because: "c4 installs c4-farm, c4-agent and c4-unit itself"
 
   on_macos do
     if Hardware::CPU.arm?

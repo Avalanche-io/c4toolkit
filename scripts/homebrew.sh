@@ -50,12 +50,12 @@ done
 RESOURCE_BLOCKS=""
 RESOURCE_INSTALL=""
 FARM_TEST_LINES=""
+# No conflicts_with against the old c4-farm and c4-agent formulas: Homebrew
+# loads a conflicting formula to check it, and an in-tap formula is untrusted
+# on a new machine, so the line refused every fresh install. The quickstart
+# says to uninstall the old pair first; brew's own link error covers the rest.
 CONFLICTS_LINE=""
 if [ -n "$OP_VERSION" ]; then
-    # The old separate formulas install the same binaries; brew must say so
-    # instead of failing at link time.
-    CONFLICTS_LINE='  conflicts_with "mrjoshuak/tap/c4-farm", "mrjoshuak/tap/c4-agent", because: "c4 installs c4-farm, c4-agent and c4-unit itself"
-'
     OP_URL="https://github.com/Avalanche-io/c4-operator/releases/download/v${OP_VERSION}"
     OP_SUMS=$(mktemp)
     if [ -n "${OPERATOR_CHECKSUMS:-}" ]; then
