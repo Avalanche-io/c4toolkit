@@ -4,6 +4,8 @@ class C4Agent < Formula
   version "0.2.0"
   license "Apache-2.0"
 
+  deprecate! date: "2026-10-26", because: "c4 installs c4-farm, c4-agent and c4-unit: brew install mrjoshuak/tap/c4"
+
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-agent_0.2.0_darwin_arm64.tar.gz"

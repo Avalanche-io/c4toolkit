@@ -40,6 +40,7 @@ class C4Farm < Formula
   version "${VERSION}"
   license "Apache-2.0"
 
+  deprecate! date: "2026-10-26", because: "c4 installs c4-farm, c4-agent and c4-unit: brew install mrjoshuak/tap/c4"
   depends_on "mrjoshuak/tap/c4-agent"
 
   on_macos do
@@ -79,6 +80,8 @@ class C4Agent < Formula
   homepage "https://github.com/${REPO}"
   version "${VERSION}"
   license "Apache-2.0"
+
+  deprecate! date: "2026-10-26", because: "c4 installs c4-farm, c4-agent and c4-unit: brew install mrjoshuak/tap/c4"
 
   on_macos do
     if Hardware::CPU.arm?

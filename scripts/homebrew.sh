@@ -50,7 +50,12 @@ done
 RESOURCE_BLOCKS=""
 RESOURCE_INSTALL=""
 FARM_TEST_LINES=""
+CONFLICTS_LINE=""
 if [ -n "$OP_VERSION" ]; then
+    # The old separate formulas install the same binaries; brew must say so
+    # instead of failing at link time.
+    CONFLICTS_LINE='  conflicts_with "mrjoshuak/tap/c4-farm", "mrjoshuak/tap/c4-agent", because: "c4 installs c4-farm, c4-agent and c4-unit itself"
+'
     OP_URL="https://github.com/Avalanche-io/c4-operator/releases/download/v${OP_VERSION}"
     OP_SUMS=$(mktemp)
     if [ -n "${OPERATOR_CHECKSUMS:-}" ]; then
@@ -104,7 +109,7 @@ class C4 < Formula
   homepage "https://cccc.io"
   version "${SUITE_VERSION}"
   license "Apache-2.0"
-
+${CONFLICTS_LINE}
   on_macos do
     if Hardware::CPU.arm?
       url "${BASE_URL}/c4-suite_v${SUITE_VERSION}_darwin_arm64.tar.gz"
