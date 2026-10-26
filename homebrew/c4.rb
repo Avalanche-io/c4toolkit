@@ -24,7 +24,7 @@ class C4 < Formula
     end
   end
 
-  on_darwin do
+  on_macos do
     if Hardware::CPU.arm?
       resource "c4-farm" do
         url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_darwin_arm64.tar.gz"
@@ -36,7 +36,7 @@ class C4 < Formula
       end
     end
   end
-  on_darwin do
+  on_macos do
     if !Hardware::CPU.arm?
       resource "c4-farm" do
         url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_darwin_amd64.tar.gz"

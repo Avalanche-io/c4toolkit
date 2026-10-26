@@ -61,9 +61,10 @@ if [ -n "$OP_VERSION" ]; then
     opsha() { local s; s=$(grep " $1\$" "$OP_SUMS" | awk '{print $1}'); [ -n "$s" ] || { echo "Error: $1 not in c4-operator checksums.txt" >&2; exit 1; }; echo "$s"; }
     # c4-farm on every platform; the c4-agent archive carries c4-agent and c4-unit
     for os_ in darwin linux; do
+        blk=macos; [ "$os_" = "linux" ] && blk=linux   # the DSL says on_macos, the archives say darwin
         for arch in arm64 amd64; do
             cond="Hardware::CPU.arm?"; [ "$arch" = "amd64" ] && cond="!Hardware::CPU.arm?"
-            RESOURCE_BLOCKS="${RESOURCE_BLOCKS}  on_${os_} do
+            RESOURCE_BLOCKS="${RESOURCE_BLOCKS}  on_${blk} do
     if ${cond}
       resource \"c4-farm\" do
         url \"${OP_URL}/c4-farm_${OP_VERSION}_${os_}_${arch}.tar.gz\"
