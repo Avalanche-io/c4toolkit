@@ -1,6 +1,6 @@
 {
   "description": "C4 suite release manifest \u2014 maps suite versions to component versions",
-  "latest": "1.0.19",
+  "latest": "1.0.20",
   "releases": {
     "1.0.18": {
       "date": "2026-10-03",
@@ -597,8 +597,7 @@
       "notes": "Patch. c4m canonical order: digit runs compare as integers of any length, never through a 64-bit or double parse, so a tree whose names hold runs of 20 or more digits has one ID instead of one per run (c4 Go, c4ts, c4-swift fixed; c4py was already right); text segments compare whole, a1 < ab (libc4 fixed). Shared vectors c4m/testdata/natural_sort_vectors.json in every implementation. Names with runs of 18 digits or fewer sort exactly as before, so their IDs are unchanged. Also c4git: the smudge filter passed through only the first 256 bytes of a non-pointer blob (data loss on checkout), fixed. c4-containers: README names C4_S3_ENDPOINT; s3worker passes S3_ENDPOINT through. Other components ship version-lockstep."
     },
     "1.0.20": {
-      "date": null,
-      "status": "planned: cut once c4-operator v0.2.0 is published",
+      "date": "2026-10-26",
       "components": {
         "c4": {
           "version": "1.0.20",
