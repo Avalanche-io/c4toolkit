@@ -73,10 +73,11 @@ Each component has its own version. A suite release bundles specific component v
 brew install mrjoshuak/tap/c4
 ```
 
-Installs c4, c4sh and c4git from the suite bundle, and depends on the
-tap's `c4-farm` and `c4-agent` formulas (published by c4-operator's
-goreleaser, or `scripts/farm-formulas.sh` here), so `c4 farm` works
-after the one install. Updated each suite release. The tap stays
+One formula: c4, c4sh and c4git from the suite bundle, plus c4-farm,
+c4-agent and c4-unit as resources fetched from the c4-operator release
+the suite pins, so `c4 farm` works after the one install. No in-tap
+`depends_on`: Homebrew 6 trusts only the formula named on the command
+line. Updated each suite release. The tap stays
 `mrjoshuak/homebrew-tap` until Avalanche-io is tied into the service
 offering (Joshua, 2026-10-21).
 
