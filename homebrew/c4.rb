@@ -2,6 +2,7 @@ class C4 < Formula
   desc "C4 universal content identification: the CLI tools (SMPTE ST 2114) and the farm tools"
   homepage "https://cccc.io"
   version "1.0.20"
+  revision 1
   license "Apache-2.0"
 
   on_macos do
@@ -27,48 +28,48 @@ class C4 < Formula
   on_macos do
     if Hardware::CPU.arm?
       resource "c4-farm" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_darwin_arm64.tar.gz"
-        sha256 "315deff1624bbf02ace6feadf2a67a85f4d605590ed92d7be7c4c40c94200ea8"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_darwin_arm64.tar.gz"
+        sha256 "1f6de619831473d29d421abe9e90d23067ce1abf55b520c8035c85a7303cf4f2"
       end
       resource "c4-agent" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-agent_0.2.0_darwin_arm64.tar.gz"
-        sha256 "6a4295de685ad78f6fac529704b9f52310eec2cee5f871eee02082c9eee256ae"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-agent_0.2.1_darwin_arm64.tar.gz"
+        sha256 "21fbd4838dfe50c38b534f04bb6e9be47e07bb43ef059a594017ec91872d0f1b"
       end
     end
   end
   on_macos do
     if !Hardware::CPU.arm?
       resource "c4-farm" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_darwin_amd64.tar.gz"
-        sha256 "d7a29ea8299c968316252ffe18cbc94da9f46d7b1bfcf56e3ff35f100d2a3976"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_darwin_amd64.tar.gz"
+        sha256 "79bf7e19a44947ce157c10201ab249e47d5aa5ce0fc5c5bddc673023220a6cc6"
       end
       resource "c4-agent" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-agent_0.2.0_darwin_amd64.tar.gz"
-        sha256 "768b4af103971bc2cc1af44de8e9ca285bf75f84477c8a8cb6a88c483d326ccc"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-agent_0.2.1_darwin_amd64.tar.gz"
+        sha256 "79d2e6c7ec79fb9adc3824dd2915fa0c5f4ddcf5a81a1beac5790861d7ad9e30"
       end
     end
   end
   on_linux do
     if Hardware::CPU.arm?
       resource "c4-farm" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_linux_arm64.tar.gz"
-        sha256 "71411ba131c5e45741ec6bd37239e5389d89396ed2e6d34365c6981b193fa08a"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_linux_arm64.tar.gz"
+        sha256 "cdbc984fc15e5457470258df672a639565b8bee20f8bfda7ed8b375963be4471"
       end
       resource "c4-agent" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-agent_0.2.0_linux_arm64.tar.gz"
-        sha256 "262fd336380f1a82efe214eff10e05457b705c1cd0cf6b20b5b7fab606bca4d7"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-agent_0.2.1_linux_arm64.tar.gz"
+        sha256 "58fef2f19248727ad343440a15623f4c97a37bb595ad3a6e599c31b3951dbd13"
       end
     end
   end
   on_linux do
     if !Hardware::CPU.arm?
       resource "c4-farm" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_linux_amd64.tar.gz"
-        sha256 "857a9ba251c7ebcfe8d8f2194e97af921c4a39d61fc780d246b33e96f5eb2dbe"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_linux_amd64.tar.gz"
+        sha256 "f39cb321e81927d3a8923ddabc94419cf97094a994969537fb2048a6eb080eb3"
       end
       resource "c4-agent" do
-        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-agent_0.2.0_linux_amd64.tar.gz"
-        sha256 "dfd9be9b595cecaf47bdadaf8cf86ee7118d27d88a9d1c3923114e1e07df8a1c"
+        url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-agent_0.2.1_linux_amd64.tar.gz"
+        sha256 "95cf23dd5b460d296d4cf0bad24fed23b94b05c3c73169084d08bdeab5809658"
       end
     end
   end

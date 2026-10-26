@@ -648,7 +648,7 @@
           "publish": "ghcr"
         },
         "c4-farm": {
-          "version": "0.2.0",
+          "version": "0.2.1",
           "repo": "Avalanche-io/c4-operator",
           "lang": "go",
           "build": "cmd/c4-farm",
@@ -657,7 +657,7 @@
           "asset": "c4-farm_{version}_{os}_{arch}"
         },
         "c4-agent": {
-          "version": "0.2.0",
+          "version": "0.2.1",
           "repo": "Avalanche-io/c4-operator",
           "lang": "go",
           "build": "cmd/c4-agent",
@@ -670,7 +670,7 @@
           "asset": "c4-agent_{version}_{os}_{arch}"
         },
         "c4-unit": {
-          "version": "0.2.0",
+          "version": "0.2.1",
           "repo": "Avalanche-io/c4-operator",
           "lang": "go",
           "build": "cmd/c4-unit",
@@ -679,7 +679,8 @@
           "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
         }
       },
-      "notes": "Patch. c4: `c4 <name>` runs `c4-<name>` from PATH when no file or directory of that name exists, and `c4 help` lists the installed tools; nothing that works on 1.0.19 changes meaning. The suite archives and the Homebrew formula now bring the farm tools from c4-operator v0.2.0: c4-farm (all platforms), c4-agent and c4-unit (c4-agent on macOS and Linux), taken from that release's own archives; `brew install mrjoshuak/tap/c4` installs c4, c4sh, c4git and, through the tap's c4-farm and c4-agent formulas, `c4 farm`. Other components ship version-lockstep."
+      "notes": "Patch. c4: `c4 <name>` runs `c4-<name>` from PATH when no file or directory of that name exists, and `c4 help` lists the installed tools; nothing that works on 1.0.19 changes meaning. The suite archives and the Homebrew formula now bring the farm tools from c4-operator v0.2.0: c4-farm (all platforms), c4-agent and c4-unit (c4-agent on macOS and Linux), taken from that release's own archives; `brew install mrjoshuak/tap/c4` installs c4, c4sh, c4git and, through the tap's c4-farm and c4-agent formulas, `c4 farm`. Other components ship version-lockstep. Formula revision 1 (2026-10-26): the farm tools come from c4-operator v0.2.1, whose `c4 farm up` works on a fresh machine; the suite archives on the c4toolkit release still carry v0.2.0's c4-farm, c4-agent and c4-unit until 1.0.21.",
+      "revision": 1
     },
     "1.1.0": {
       "date": null,
@@ -734,7 +735,7 @@
           "publish": "ghcr"
         },
         "c4-farm": {
-          "version": "0.2.0",
+          "version": "0.2.1",
           "repo": "Avalanche-io/c4-operator",
           "lang": "go",
           "build": "cmd/c4-farm",
@@ -743,7 +744,7 @@
           "asset": "c4-farm_{version}_{os}_{arch}"
         },
         "c4-agent": {
-          "version": "0.2.0",
+          "version": "0.2.1",
           "repo": "Avalanche-io/c4-operator",
           "lang": "go",
           "build": "cmd/c4-agent",
@@ -756,7 +757,7 @@
           "asset": "c4-agent_{version}_{os}_{arch}"
         },
         "c4-unit": {
-          "version": "0.2.0",
+          "version": "0.2.1",
           "repo": "Avalanche-io/c4-operator",
           "lang": "go",
           "build": "cmd/c4-unit",

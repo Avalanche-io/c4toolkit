@@ -30,6 +30,14 @@ LINUX_ARM64_SHA=$(grep "c4-suite.*linux_arm64" "$DIST/checksums.txt" | awk '{pri
 
 BASE_URL="https://github.com/Avalanche-io/c4toolkit/releases/download/v${SUITE_VERSION}"
 
+# Optional "revision" on the suite entry: a formula revision (resources
+# re-pointed, same suite archives), so brew upgrades installs of the same
+# version.
+REVISION=$(jq -r ".releases[\"${SUITE_VERSION}\"].revision // empty" "$RELEASES")
+REVISION_LINE=""
+[ -n "$REVISION" ] && REVISION_LINE="  revision ${REVISION}
+"
+
 GO_TOOLS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | select(.value.lang == \"go\") | .key" "$RELEASES" 2>/dev/null || echo "c4")
 
 # The suite's own Go tools install from the bundle. Components that come
@@ -108,7 +116,7 @@ class C4 < Formula
   desc "C4 universal content identification: the CLI tools (SMPTE ST 2114) and the farm tools"
   homepage "https://cccc.io"
   version "${SUITE_VERSION}"
-  license "Apache-2.0"
+${REVISION_LINE}  license "Apache-2.0"
 ${CONFLICTS_LINE}
   on_macos do
     if Hardware::CPU.arm?

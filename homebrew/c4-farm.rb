@@ -1,7 +1,7 @@
 class C4Farm < Formula
   desc "Submit work to a C4 farm, watch it and take its output home; c4 farm up makes a farm on this machine"
   homepage "https://github.com/Avalanche-io/c4-operator"
-  version "0.2.0"
+  version "0.2.1"
   license "Apache-2.0"
 
   deprecate! date: "2026-10-26", because: "c4 installs c4-farm, c4-agent and c4-unit: brew install mrjoshuak/tap/c4"
@@ -9,21 +9,21 @@ class C4Farm < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_darwin_arm64.tar.gz"
-      sha256 "315deff1624bbf02ace6feadf2a67a85f4d605590ed92d7be7c4c40c94200ea8"
+      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_darwin_arm64.tar.gz"
+      sha256 "1f6de619831473d29d421abe9e90d23067ce1abf55b520c8035c85a7303cf4f2"
     else
-      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_darwin_amd64.tar.gz"
-      sha256 "d7a29ea8299c968316252ffe18cbc94da9f46d7b1bfcf56e3ff35f100d2a3976"
+      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_darwin_amd64.tar.gz"
+      sha256 "79bf7e19a44947ce157c10201ab249e47d5aa5ce0fc5c5bddc673023220a6cc6"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_linux_arm64.tar.gz"
-      sha256 "71411ba131c5e45741ec6bd37239e5389d89396ed2e6d34365c6981b193fa08a"
+      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_linux_arm64.tar.gz"
+      sha256 "cdbc984fc15e5457470258df672a639565b8bee20f8bfda7ed8b375963be4471"
     else
-      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.0/c4-farm_0.2.0_linux_amd64.tar.gz"
-      sha256 "857a9ba251c7ebcfe8d8f2194e97af921c4a39d61fc780d246b33e96f5eb2dbe"
+      url "https://github.com/Avalanche-io/c4-operator/releases/download/v0.2.1/c4-farm_0.2.1_linux_amd64.tar.gz"
+      sha256 "f39cb321e81927d3a8923ddabc94419cf97094a994969537fb2048a6eb080eb3"
     end
   end
 
