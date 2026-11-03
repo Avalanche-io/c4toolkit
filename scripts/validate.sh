@@ -38,7 +38,7 @@ session_names_check() {
         git grep -I -n -o -E '\bc4-[a-z][a-z0-9-]*' -- ':!node_modules' ':!*.lock' ':!*.sum' 2>/dev/null |
             grep -v -E ":(${PUBLIC_NAMES})$"
         git grep -I -n -E '\.handoff/|-to-c4[a-z-]*\b|\bc4-to-' -- ':!node_modules' 2>/dev/null
-    } | head -8)
+    } | head -8) || true # a clean tree makes grep exit 1; under set -e that killed the validator (1.0.22)
     if [ -n "$hits" ]; then
         echo "  session names: unknown c4-* names or handoff references in ${2} (public text names roles, never sessions; add a real product name to PUBLIC_NAMES):"
         echo "$hits" | sed 's/^/    /'
