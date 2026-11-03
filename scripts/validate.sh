@@ -26,6 +26,22 @@ echo ""
 
 COMPONENTS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | \"\(.key) \(.value.version) \(.value.repo) \(.value.lang)\"" "$RELEASES")
 
+# Public repositories name roles, never agent sessions. A tag whose
+# tracked text names one is refused (Joshua, 2026-11-03).
+SESSION_NAMES='c4-fleet|c4-accountability|c4-onboarding|c4-hud-intro|c4-agent-jobs|agent-jobs|c4-launch|c4-front-door|c4-sched|c4-authoring|c4-to-c4|c4d-to-|\.handoff/|\bincome\b'
+session_names_check() {
+    # $1: a checkout at the tag; $2: its name for the report
+    local hits
+    hits=$(cd "$1" && git grep -I -n -E "$SESSION_NAMES" -- ':!node_modules' ':!*.lock' ':!*.sum' 2>/dev/null | head -5)
+    if [ -n "$hits" ]; then
+        echo "  session names: FOUND in ${2} (public text must name roles, never sessions):"
+        echo "$hits" | sed 's/^/    /'
+        ERRORS=$((ERRORS + 1))
+    else
+        echo "  session names: none"
+    fi
+}
+
 while IFS=' ' read -r name version repo lang; do
     echo "--- ${name} v${version} (${lang}) ---"
 
@@ -38,6 +54,15 @@ while IFS=' ' read -r name version repo lang; do
         echo "  tag: MISSING v${version} in ${repo}"
         ERRORS=$((ERRORS + 1))
     fi
+
+    # Every component's tagged tree is checked for agent session names.
+    GATEDIR=$(mktemp -d)
+    if git clone -q --depth 1 --branch "v${version}" "https://github.com/${repo}.git" "$GATEDIR" 2>/dev/null; then
+        session_names_check "$GATEDIR" "${repo}@v${version}"
+    else
+        echo "  session names: (tag not cloneable yet; checked at build)"
+    fi
+    rm -rf "$GATEDIR"
 
     # Components taken from their own GitHub release ("asset") are checked
     # there: the archive must exist for darwin/arm64 (the rest at build time).
