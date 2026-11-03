@@ -27,20 +27,20 @@ echo ""
 COMPONENTS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | \"\(.key) \(.value.version) \(.value.repo) \(.value.lang)\"" "$RELEASES")
 
 # Public repositories name roles, never agent sessions (Joshua, 2026-11-03).
-# The gate lists no session names (that would publish them): every
-# "c4-<word>" token in a tag's tracked text must be a known public name,
-# and handoff paths and "-to-c4" relay names are refused outright.
-PUBLIC_NAMES='c4-operator|c4-farm|c4-agent|c4-unit|c4-sync|c4-hud|c4-mark|c4-mcp|c4-containers|c4-swift|c4-python|c4-pipeline|c4-s3worker|c4-suite|c4-local|c4-local-registry|c4-system|c4-store|c4-manager|c4-node|c4-egress|c4-regional|c4-job-[a-z0-9]+|c4-sample[a-z0-9-]*|c4-[0-9]+|c4-cli|c4-id|c4-toolkit|c4-bench[a-z0-9-]*|c4-tab|c4-c4m|c4-lib|c4-go|c4-rs|c4-test[a-z0-9-]*|c4-found'
+# Correction, 1.0.22: the first gate (0ee640a) allowlisted every "c4-<word>"
+# token with an ERE "\b", which git grep reads as a literal "b", so it only
+# ever matched tokens preceded by a b and passed everything else; with a
+# real word boundary the allowlist is unworkable (plugin names, anchors,
+# test strings). The gate is now a denylist of the session and relay names
+# the fleet actually uses, in Perl syntax, plus handoff paths. Add a name
+# here when a session is created; the list is private to this script.
+SESSION_NAMES='\b(c4-fleet|c4-lead|c4-onboarding|c4-front-door|c4-core-lead|c4d-lead|c4-fleet-lead|income-to-|-to-income)\b|\.handoff/|-to-c4-[a-z-]+\b|\bc4-to-c4-'
 session_names_check() {
     # $1: a checkout at the tag; $2: its name for the report
     local hits
-    hits=$(cd "$1" && {
-        git grep -I -n -o -E '\bc4-[a-z][a-z0-9-]*' -- ':!node_modules' ':!*.lock' ':!*.sum' 2>/dev/null |
-            grep -v -E ":(${PUBLIC_NAMES})$"
-        git grep -I -n -E '\.handoff/|-to-c4[a-z-]*\b|\bc4-to-' -- ':!node_modules' 2>/dev/null
-    } | head -8) || true # a clean tree makes grep exit 1; under set -e that killed the validator (1.0.22)
+    hits=$(cd "$1" && git grep -I -n -P "$SESSION_NAMES" -- ':!node_modules' ':!*.lock' ':!*.sum' 2>/dev/null | head -8) || true # a clean tree makes grep exit 1
     if [ -n "$hits" ]; then
-        echo "  session names: unknown c4-* names or handoff references in ${2} (public text names roles, never sessions; add a real product name to PUBLIC_NAMES):"
+        echo "  session names: agent session or handoff references in ${2} (public text names roles, never sessions):"
         echo "$hits" | sed 's/^/    /'
         ERRORS=$((ERRORS + 1))
     else
