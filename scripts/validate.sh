@@ -27,18 +27,16 @@ echo ""
 COMPONENTS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | \"\(.key) \(.value.version) \(.value.repo) \(.value.lang)\"" "$RELEASES")
 
 # Public repositories name roles, never agent sessions (Joshua, 2026-11-03).
-# Correction, 1.0.22: the first gate (0ee640a) allowlisted every "c4-<word>"
-# token with an ERE "\b", which git grep reads as a literal "b", so it only
-# ever matched tokens preceded by a b and passed everything else; with a
-# real word boundary the allowlist is unworkable (plugin names, anchors,
-# test strings). The gate is now a denylist of the session and relay names
-# the fleet actually uses, in Perl syntax, plus handoff paths. Add a name
-# here when a session is created; the list is private to this script.
-SESSION_NAMES='\b(c4-fleet|c4-lead|c4-onboarding|c4-front-door|c4-core-lead|c4d-lead|c4-fleet-lead|income-to-|-to-income)\b|\.handoff/|-to-c4-[a-z-]+\b|\bc4-to-c4-'
+# The denylist lives in session-names.sh, shared with gate.sh. Correction,
+# 1.0.22: the first gate (0ee640a) allowlisted every "c4-<word>" token with
+# an ERE "\b", which git grep reads as a literal "b", so it matched nothing
+# real; with a real word boundary an allowlist is unworkable.
+# shellcheck source=session-names.sh
+. "$(cd "$(dirname "$0")" && pwd)/session-names.sh"
 session_names_check() {
     # $1: a checkout at the tag; $2: its name for the report
     local hits
-    hits=$(cd "$1" && git grep -I -n -P "$SESSION_NAMES" -- ':!node_modules' ':!*.lock' ':!*.sum' 2>/dev/null | head -8) || true # a clean tree makes grep exit 1
+    hits=$(session_names_hits "$1")
     if [ -n "$hits" ]; then
         echo "  session names: agent session or handoff references in ${2} (public text names roles, never sessions):"
         echo "$hits" | sed 's/^/    /'
@@ -100,6 +98,20 @@ while IFS=' ' read -r name version repo lang; do
                 ERRORS=$((ERRORS + 1))
             fi
 
+            # The tagged tree's binary must report its own version: c4's
+            # is a constant in cmd/c4, and the v1.0.22 tag shipped it
+            # saying 1.0.21 because the bump commit was missed (superseded
+            # by 1.0.23 the same day). Tools with a "build" path and a
+            # "version" verb are run once on the host.
+            BUILD_PATH=$(jq -r ".releases[\"${SUITE_VERSION}\"].components[\"${name}\"].build // empty" "$RELEASES")
+            if [ -n "$BUILD_PATH" ] && [ "$repo" != "Avalanche-io/c4-operator" ]; then
+                reported=$(cd "$CLONEDIR" && go run "./${BUILD_PATH}" version 2>/dev/null | head -1) || reported=""
+                case "$reported" in
+                    *"${version}"*) echo "  version: OK (${reported})" ;;
+                    *) echo "  version: MISMATCH, binary reports '${reported}', tag is v${version}"; ERRORS=$((ERRORS + 1)) ;;
+                esac
+            fi
+
             # Check for cross-language test vectors
             if find "$CLONEDIR" -name "known_ids.json" -print -quit 2>/dev/null | grep -q .; then
                 echo "  vectors: present"
@@ -119,5 +131,9 @@ if [ $ERRORS -gt 0 ]; then
     echo "FAILED: ${ERRORS} error(s) found"
     exit 1
 else
-    echo "ALL OK — ready to release"
+    # The suite marker: ~/.claude/check-release-gate.py requires it before
+    # `gh release create v<version>` may run.
+    mkdir -p "$HOME/.c4-release-gates"
+    date -u +%FT%TZ > "$HOME/.c4-release-gates/suite-v${SUITE_VERSION}"
+    echo "ALL OK — ready to release (gate marker: ~/.c4-release-gates/suite-v${SUITE_VERSION})"
 fi
