@@ -765,7 +765,7 @@
           "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
         }
       },
-      "notes": "Patch. No component changes meaning; every component ships version-lockstep. The suite archives and the Homebrew formula bring the farm tools from c4-operator v0.2.2, whose embedded HUD matches its server (on v0.2.1 every write from the browser was refused: the HUD predated the X-C4-HUD header the server requires on cookie-authorized writes), whose `c4 farm up` keeps an existing farm and its ports, whose `c4 farm down` no longer deletes c4-local by default, and whose status and up name `c4 farm open --as ROLE`. This also retires the 1.0.20 revision 1 split, where the formula carried v0.2.1 but the archives still carried v0.2.0."
+      "notes": "Patch. c4's `explain patch` now reports the plan `patch` would make, from the same sources, so content a folder already holds under another name counts (before, it said Missing for a switch between two views of files the folder holds, which `c4 patch` itself performs); otherwise every component ships version-lockstep. The suite archives and the Homebrew formula bring the farm tools from c4-operator v0.2.2, whose embedded HUD matches its server (on v0.2.1 every write from the browser was refused: the HUD predated the X-C4-HUD header the server requires on cookie-authorized writes), whose `c4 farm up` keeps an existing farm and its ports, whose `c4 farm down` no longer deletes c4-local by default, and whose status and up name `c4 farm open --as ROLE`. This also retires the 1.0.20 revision 1 split, where the formula carried v0.2.1 but the archives still carried v0.2.0."
     },
     "1.1.0": {
       "date": null,

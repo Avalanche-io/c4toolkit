@@ -1,27 +1,26 @@
 class C4 < Formula
   desc "C4 universal content identification: the CLI tools (SMPTE ST 2114) and the farm tools"
   homepage "https://cccc.io"
-  version "1.0.20"
-  revision 2
+  version "1.0.21"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.20/c4-suite_v1.0.20_darwin_arm64.tar.gz"
-      sha256 "98a5dd756d5e91d8e617e69dc22bb9764e720dfc75cd7b81f7db327ea9855a67"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.21/c4-suite_v1.0.21_darwin_arm64.tar.gz"
+      sha256 "92da3fae6ce258b09b950addee2eeecd761035770ad8788406f9a626241f51c0"
     else
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.20/c4-suite_v1.0.20_darwin_amd64.tar.gz"
-      sha256 "21dc03a5b210ae4cf485bb8a1c8c9bcebfe4462d373c40b01bfbc752fc075129"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.21/c4-suite_v1.0.21_darwin_amd64.tar.gz"
+      sha256 "0049d16a255a696d7e08ba2b82c436ceb08b47fc69e247ab3e912a41efb13403"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.20/c4-suite_v1.0.20_linux_arm64.tar.gz"
-      sha256 "dd1e7dd8a03fa3d4d9686e849cefc8f9fe8364792bbef1cfadf329cce84ec077"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.21/c4-suite_v1.0.21_linux_arm64.tar.gz"
+      sha256 "d8cbc6160f67c3ec573f40d0085f476e01975a21431bc75b77cfcd3d374de49b"
     else
-      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.20/c4-suite_v1.0.20_linux_amd64.tar.gz"
-      sha256 "986aa3abefee01e144b71c4e3c5dcf2cfa6c79c5c33325fabd8ee9082e57b0fd"
+      url "https://github.com/Avalanche-io/c4toolkit/releases/download/v1.0.21/c4-suite_v1.0.21_linux_amd64.tar.gz"
+      sha256 "6de908ddf41d12599316198d8b5182d508deb6e4b186b5b662ff3ffc314220ef"
     end
   end
 
