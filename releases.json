@@ -1,6 +1,6 @@
 {
   "description": "C4 suite release manifest \u2014 maps suite versions to component versions",
-  "latest": "1.0.23",
+  "latest": "1.0.24",
   "releases": {
     "1.0.18": {
       "date": "2026-10-03",
@@ -938,7 +938,7 @@
       "notes": "Same-day supersede of 1.0.22, whose c4 tag carries the same code but a binary that reports `c4 1.0.21` (the version constant in cmd/c4 was not bumped before the tag; 1.0.22 never reached the c4toolkit release or the tap). Otherwise identical to 1.0.22's notes: Patch. The patch rule is fixed in every implementation at once: a c4m patch that restates a directory line identically and then lists children under it deepens that directory (erratum 2026-07-31); through 1.0.21 every implementation applied it as a removal of the whole subtree. c4: `c4 diff`'s patch of a null-ID directory whose only change was in its children was applied by `c4 patch` as removal, silently (fix on master since July, backported with the shared deepen-vs-remove conformance vector); patch and diff compare timestamps at the format's one-second resolution; `c4 id -s` no longer warns \"failed to store l: is a directory\" on a tree with a symlink to a directory (the link carries the directory's C4 ID, whose record the directory's own entry stores). c4py: the same rule in apply_patch, and the decoder's private copy of the rule is gone (it delegates to apply_patch). c4ts: the same rule; removing a directory now removes its descendants too (they were left as orphan entries while the root ID still matched); pretty timestamps carry a numeric zone offset (`-0600`) instead of a guessed zone abbreviation: an abbreviation a V8 parser cannot read is a bug, and numeric offsets are valid RFC 3339 for every decoder in the suite. c4-swift: the same rule and the same descendant fix. libc4: the same rule in c4m_apply_patch. Every implementation carries the shared vector as a test, and the CI matrices now run on pull requests against the release lines (c4ts and c4-swift gained CI). c4sh, c4git and c4-containers ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
     },
     "1.0.24": {
-      "date": null,
+      "date": "2026-11-07",
       "components": {
         "c4": {
           "version": "1.0.24",
@@ -1020,7 +1020,7 @@
           "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
         }
       },
-      "notes": "Planned patch, approved by Joshua 2026-11-07 for this release; cut after the release line's exit-code fix lands and the gate passes. c4: `c4 patch` hashes every file in the destination for the plan (through 1.0.23 it trusted size and mtime against the target, so a byte change under the same size and mtime was reported Reconciled and left in place); `-c GUIDE.c4m` is the stated way to trust size and mtime. A directory whose contents a plan changes gets its recorded time set back after the change, so a nested change no longer leaves the directory's mtime at the write time. `c4 id -s` refuses without a content store instead of silently scanning without storing. `c4 id DIR` with an unreadable file declares it on stderr and exits 2 instead of 0. Other components ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
+      "notes": "Patch. c4: `c4 patch` hashes every file in the destination for the plan (through 1.0.23 it trusted size and mtime against the target, so a byte change under the same size and mtime was reported Reconciled and left in place); `-c GUIDE.c4m` is the stated way to trust size and mtime. A directory whose contents a plan changes gets its recorded time set back after the change, so a nested change no longer leaves the directory's mtime at the write time. `c4 id -s` refuses without a content store instead of silently scanning without storing. `c4 id DIR` with an unreadable file declares it on stderr and exits 2 instead of 0. Other components ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
     },
     "1.1.0": {
       "date": null,
