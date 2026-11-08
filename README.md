@@ -147,6 +147,20 @@ publishes are done as part of step 1 (the per-component flow), not in
 the c4toolkit run. c4-containers Docker images are built by that
 repo's CI on tag.
 
+Two things learned releasing 1.0.24 right after a reboot (2026-11-07):
+
+- **npm after a reboot: log in first.** The web-login token in
+  `~/.npmrc` did not survive the restart: `npm whoami` returned 401 and
+  `pnpm publish` failed with a misleading E404 ("could not be found or
+  you do not have permission"). Run `npm login --auth-type=web`, open the
+  link it prints, then publish; each publish still asks for one browser
+  approval of its own.
+- **Run publishes in the background and read their output afterwards.**
+  A publish piped through `head` was killed by SIGPIPE while polling for
+  its browser approval, and the attempt was lost. Start the publish as a
+  background task, pick the authorization link out of its output file,
+  and read the result when it exits; never put a filter on its pipe.
+
 ## Per-release coordination homes
 
 Each release keeps its working specs, module briefings, friction
