@@ -1192,6 +1192,92 @@
       },
       "notes": "Proposed patch, awaiting Joshua's go; cut once each component's 1.0.26 commit has landed and passed the gate. Every implementation now reads a c4m line back as it was written, or refuses it naming the line: after a link operator one field is the C4 ID field and two are a target and the C4 ID field; pretty padding is never part of a name or target; a backslash always starts a two-byte escape, so a name or target ending in a backslash reads back as itself (c4 1.0.25's `c4 patch` silently left such files out of a materialised tree); a size token ends at a space and each mode position holds only its own letter or `-` (`6x real.txt` read as size 6 and the name `x real.txt`). Pinned by the shared link-target, backslash-name and damaged-line vectors in every implementation, except that Go's 1.0.x decoder loudly refuses 3 of the link-target vector's 10 shapes (null-mode links whose target starts with c4, written only by the library); the four ports read all 10, and Go reads them from 1.0.27. c4: the backslash and damaged-field rules; CI now runs the race detector (it never ran before). The race and test-deflake fixes touched cmd/c4/internal/scan, an internal package the CLI does not link, so they do not change c4 1.0.26's behaviour. c4 also: `c4 patch` no longer empties a directory the target lists only as one line; through 1.0.25 a one-level record (each subdirectory one line with its own C4 ID, as c4 1.1 stores a tree) removed every file under each such subdirectory with exit 0, and now a directory with no children listed is emptied only when its C4 ID is the empty listing's. c4 also: released 1.0.25 can delete a file whose name changes only in case, and can pair one file's name with another's bytes when two names fold together (case or Unicode form), silently, on default macOS and Windows disks. 1.0.26 measures each fold on the destination before writing, with no new dependency: the byte-order last name of a folded set is written whole, the others are refused and named with exit 2, a dry run writes nothing, and a file whose name changes only in case is kept and respelled. c4py: the decoder rules; and a directory's timestamp is its own mtime, as in Go and c4ts. c4py's scan C4 IDs change: through 1.0.25 c4py gave a directory its newest child's time and an empty directory the epoch, so its scan IDs differed from Go's on nearly every tree with a directory; they now match Go's (measured on real trees against the Go CLI). c4ts: the decoder rules; and released c4ts could delete a file whose only change was its modification time (reading a patch that restated it with a new time as a removal), and its own patches left such changes out; patches now use every-field identity, as the spec and Go do (pinned by the shared apply-from metadata-only case). c4-swift: the decoder rules, on a new release/1.0.x line from v1.0.25; a damaged mode is an error, no longer a null. Released c4m-swift refuses to read any c4m line whose name isn't ASCII, and keys names as Swift Strings, which treat the NFC and NFD spellings as one name, and its set operations compare entries by bare name, so same-named files in different folders were confused; 1.0.26 reads every name by its UTF-8 bytes and keys every name and path by them (the shared unicode-name vector). libc4: the decoder rules; released libc4 1.0.x silently read null-timestamp pretty lines with the padding inside names and targets, and 1.0.26 refuses every padded line, naming it; its encoder applied SafeName twice, so a name holding a backslash was written as a different name with a wrong root ID; an empty manifest's C4 ID is the ID of zero bytes, not nil (the shared empty-tree vector); its patch-chain reader shares the one line parser. Not included: c4ts main's unreadable-file scan change (a null C4 ID and a report instead of an abort), left for Joshua to decide with core's held #76; the collapsed-directory size fix (every implementation hashed a childless directory known only by its C4 ID with size 0; library reach only, planned for 1.0.27); and the zero-versus-null rule, which stays out of every implementation on this line until core ships it. c4sh, c4git and c4-containers ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
     },
+    "1.0.27": {
+      "date": null,
+      "status": "draft: for Joshua after 1.0.26 ships",
+      "components": {
+        "c4": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.27",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        },
+        "c4-farm": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-farm",
+          "test": "./cmd/c4-farm/... ./internal/farmcli/...",
+          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-farm_{version}_{os}_{arch}"
+        },
+        "c4-agent": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-agent",
+          "goos": [
+            "darwin",
+            "linux"
+          ],
+          "test": "./cmd/c4-agent/...",
+          "note": "the host runner; macOS and Linux only. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-agent_{version}_{os}_{arch}"
+        },
+        "c4-unit": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-unit",
+          "asset": "c4-unit_{version}_{os}_{arch}",
+          "test": "./cmd/c4-unit/...",
+          "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
+        }
+      },
+      "notes": "Draft plan, not yet proposed: it goes to Joshua after 1.0.26 ships. Each component's 1.0.27 work is on its release/1.0.27 branch, cut from its 1.0.26 head (c4 ac75240, c4py 44dceb3, c4ts f2aa714, c4-swift a66ce0d, libc4 94cd479). After the 1.0.26 tags each is rebased if needed, CI runs again, and release/1.0.x fast-forwards.\n\nOn the release/1.0.27 branches:\n- A name is never a path. Every decoder refuses a name holding a `/` other than a directory's trailing one, or `.`, `..`, `./`, `../`, `/` or the empty name, naming the line; the encoders refuse to write one; a description holding one has no C4 ID (the nil ID) and no canonical text. Through 1.0.26 the implementations read such lines differently, some silently: libc4 cut the name at its first `/` and dropped the rest of the line, its C4 ID included, and c4m-swift read `.` and `..` as names. Pinned by the shared name-rule vector. c4m-swift has the decoder half only; its encoder's refusal needs `Encoder.encode()` to throw, an API change held for Joshua. (c4 #128, c4py #16, c4ts #16, c4-swift #14, libc4 #16)\n- A backslash in a name is valid: only `/` separates paths. Through 1.0.26 the validators of c4, c4py and libc4 refused such a name as a path; the c4 CLI does not call the validator, so this was library-only.\n- A raw space, quote or control byte in a name is refused, naming the line. In c4, c4py and c4-swift the IsSequence-without-range fallback now writes its name escaped. Pinned by the shared name-escape vector.\n- A name whose bytes are not UTF-8: c4py writes it as Tier 3 and can identify its tree (through 1.0.26 both raised); c4ts and c4-swift refuse it, naming the line, where c4ts replaced the bytes with U+FFFD and c4-swift read the name as its escaped text. The refusal is interim, while Joshua rules on carrying names as bytes. Pinned by the shared SafeName vector (the readers' half).\n- c4: a link whose target starts with `c4` (a C4 ID's text, `c4studio`) under a null mode reads back as written. Through 1.0.26 Go's 1.0.x decoder loudly refused 3 of the shared link-target vector's 10 lines; the four ports already read all 10.\n- None of these changes the C4 ID of a valid description that an implementation already read correctly. Where an implementation read a line wrongly, it now reads it right or refuses it, naming the line.\n\nPlanned, not yet on the release/1.0.27 branches. **Each of these changes C4 IDs:**\n- **Changes C4 IDs: the childless-directory size rule.** On every implementation's main (c4 50ba056, c4py #11, c4ts #9, c4-swift #8, libc4 #12) with the shared childless-dir vector. A directory listed with no children, a null size and a C4 ID other than the empty listing's keeps its null size. Through 1.0.26 every implementation hashed it with size 0, a value nothing stated or observed. The C4 ID changes for any description holding such a line. No CLI path writes one; it reaches users through the library or another tool's output.\n- **Changes C4 IDs: c4ts records symbolic links** (c4ts #10, open against main). Through 1.0.26 c4ts's scanner skipped every link. It now records each one as Go does, so its scan C4 IDs change for any tree holding a link and match the Go CLI's (measured on four trees).\n- **Changes C4 IDs: c4py keeps a link target's backslashes** (c4py #12, open against main). Off Windows, c4py's scanner rewrote `\\` to `/` in a link target, recording a different target. Its scan C4 IDs change for a tree holding such a link, and match the Go CLI's.\n- **Changes C4 IDs: c4py records links to directories and to links as Go does** (not yet opened). Measured 2026-11-11 on one tree, c4py main against the Go reference: a link to a directory is recorded as `to-dir/` with the empty listing's ID where Go records `to-dir -> sub` with that directory's ID; a link to another link gets the final file's ID where Go records none. The root C4 IDs differ. In 1.0.27 only if it lands in time.\n\nHeld for Joshua, not in 1.0.27 unless ruled: the SafeName writer fixes in the four ports (pin a Unicode version or not; carry non-UTF-8 names as bytes or refuse them); c4m-swift's throwing encoder; libc4's declared but undefined C API; c4ts main's unreadable-file scan change.\n\nStays off 1.0.x: the zero-versus-null rule and the chain-grammar erratum (closing validator), as in 1.0.26. c4sh, c4git and c4-containers ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
+    },
     "1.1.0": {
       "date": null,
       "status": "planned: the v1.1 suite from each repo's main line; versions and date are set at release time",
