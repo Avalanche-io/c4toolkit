@@ -1022,6 +1022,91 @@
       },
       "notes": "Patch. c4: `c4 patch` hashes every file in the destination for the plan (through 1.0.23 it trusted size and mtime against the target, so a byte change under the same size and mtime was reported Reconciled and left in place); `-c GUIDE.c4m` is the stated way to trust size and mtime. A directory whose contents a plan changes gets its recorded time set back after the change, so a nested change no longer leaves the directory's mtime at the write time. `c4 id -s` refuses without a content store instead of silently scanning without storing. `c4 id DIR` with an unreadable file declares it on stderr and exits 2 instead of 0. Other components ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
     },
+    "1.0.25": {
+      "date": null,
+      "components": {
+        "c4": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.25",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        },
+        "c4-farm": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-farm",
+          "test": "./cmd/c4-farm/... ./internal/farmcli/...",
+          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-farm_{version}_{os}_{arch}"
+        },
+        "c4-agent": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-agent",
+          "goos": [
+            "darwin",
+            "linux"
+          ],
+          "test": "./cmd/c4-agent/...",
+          "note": "the host runner; macOS and Linux only. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-agent_{version}_{os}_{arch}"
+        },
+        "c4-unit": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-unit",
+          "asset": "c4-unit_{version}_{os}_{arch}",
+          "test": "./cmd/c4-unit/...",
+          "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
+        }
+      },
+      "notes": "Planned patch, approved by Joshua 2026-11-10 (\"go with 1.0.25\"); cut once each component's 1.0.25 commit has landed and passed the gate. c4: `c4 patch -q` of a names-only pretty description no longer removes every real file (a pretty line with a null C4 ID read its alignment padding into the name); a pretty line with a null timestamp no longer reads its padding into a link target (`c4 id -e` on a tree holding an epoch-dated symlink wrote a file that read back with every such link pointing elsewhere, a different ID, exit 0); `c4 cat -r` names every listing the store lacks and exits 2, and `c4 patch -r` refuses a partial tree; `c4 id -q` without `-s` says on stderr that it printed nothing. c4py: the same names-only deletion fix; a pretty timestamp marked UTC is read as UTC (through 1.0.24 it was read as the reader's local time, hours wrong with no error), numeric offsets parse, an unknown zone abbreviation is refused. c4ts: the same names-only deletion fix. The zero-versus-null rule stays out of every implementation on this line until core ships it: c4's 1.0.x pretty encoder writes ten dashes for a null mode, which a port with the rule would read as a known zero. c4-swift, libc4, c4sh, c4git and c4-containers ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
+    },
     "1.1.0": {
       "date": null,
       "status": "planned: the v1.1 suite from each repo's main line; versions and date are set at release time",
