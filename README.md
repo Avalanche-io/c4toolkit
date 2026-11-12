@@ -127,6 +127,12 @@ The full process is documented at workspace-level
    for parallel execution).
 2. Edit `releases.json` — add a new version entry with updated component
    versions; set `"latest"` to the new version.
+   **Make the notes public text before anything else.** The `notes` become
+   the GitHub release body word for word, so strip the draft's working
+   notes: the "Held for Joshua" list, any "while Joshua rules" asides, any
+   person named, what is "still to come", and the `"status": "draft…"`
+   field. `./scripts/release.sh <version> --dry-run` refuses until they are
+   gone (Step 0); run it even when publishing by hand with step 5.
 3. `./scripts/validate.sh <version>` — verify tags exist + tests pass.
 4. `./scripts/build.sh <version>` — produces archives in `dist/<version>/`.
 5. `gh release create v<version> dist/<version>/*` — uploads to the

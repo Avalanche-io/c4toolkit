@@ -32,6 +32,30 @@ if ! jq -e ".releases[\"${SUITE_VERSION}\"]" "$RELEASES" &>/dev/null; then
     exit 1
 fi
 
+# Step 0: the release notes are public text. They become the GitHub
+# release body as written, so a draft's working notes must be gone before
+# anything ships: no decisions held for a person, no person named, no
+# "still to come", and no draft status. Runs in --dry-run too.
+NOTES_CHECK=$(jq -r ".releases[\"${SUITE_VERSION}\"].notes // \"\"" "$RELEASES")
+STATUS_CHECK=$(jq -r ".releases[\"${SUITE_VERSION}\"].status // \"\"" "$RELEASES")
+NOTES_BAD=""
+for pattern in 'Held for Joshua' 'while Joshua rules' 'for Joshua' 'Joshua' 'Draft plan' 'not yet proposed' 'Still to come' 'still to come'; do
+    if printf '%s' "$NOTES_CHECK" | grep -q -F -- "$pattern"; then
+        NOTES_BAD="${NOTES_BAD}  notes contain: ${pattern}
+"
+    fi
+done
+case "$STATUS_CHECK" in
+    draft*) NOTES_BAD="${NOTES_BAD}  status is '${STATUS_CHECK}'
+" ;;
+esac
+if [ -n "$NOTES_BAD" ]; then
+    echo "Error: the ${SUITE_VERSION} notes in $RELEASES are not ready to publish:" >&2
+    printf '%s' "$NOTES_BAD" >&2
+    echo "Strip the draft's working notes (held items, named people, what is still to come) and the draft status first." >&2
+    exit 1
+fi
+
 echo "C4 Suite Release ${SUITE_VERSION}"
 echo "================================"
 if $DRY_RUN; then echo "(DRY RUN — no changes will be made)"; fi
