@@ -1191,7 +1191,7 @@
           "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
         }
       },
-      "notes": "The v1.1 suite. c4: external tool dispatch (c4 farm runs c4-farm), natural order compares digit runs of any length, and the rest of CHANGELOG.md Unreleased. The suite archives and the Homebrew formula bring c4-farm and c4-agent from c4-operator at the pinned tag; the formula moves to Avalanche-io/homebrew-tap."
+      "notes": "The v1.1 suite. c4: external tool dispatch (c4 farm runs c4-farm), natural order compares digit runs of any length, and the rest of CHANGELOG.md Unreleased. The suite archives and the Homebrew formula bring c4-farm and c4-agent from c4-operator at the pinned tag; the formula moves to Avalanche-io/homebrew-tap.\n\nMigration step (\u26a0 breaking): a c4m file that ends with a bare C4 ID is now a format error, refused by every reader in every implementation (ruled 2026-11-08; c4 `design/trailing-id.md`). Through 1.0.26 `c4 diff` ended its output with the new state's ID, so chains grown with `c4 diff >> FILE.c4m` before 1.0.27 end that way. `c4 id -l FILES` lists the files that need it. To keep a chain's layers, delete its final line; nothing else changes. To get one plain c4m of the final state, run `c4 id FILE.c4m > fixed.c4m`: the normaliser verifies the trailing ID as a checkpoint, drops it, says so on stderr, and resolves the chain, as it does any chain (same description ID, layers gone; `c4 id -d FILE` shows it). A trailing ID that does not verify is reported (exit 1) and nothing is written, so that file is left for you to inspect."
     }
   }
 }
