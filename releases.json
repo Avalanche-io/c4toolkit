@@ -1,6 +1,6 @@
 {
   "description": "C4 suite release manifest \u2014 maps suite versions to component versions",
-  "latest": "1.0.25",
+  "latest": "1.0.26",
   "releases": {
     "1.0.18": {
       "date": "2026-10-03",
@@ -1106,6 +1106,91 @@
         }
       },
       "notes": "Patch. c4: `c4 patch -q` of a names-only pretty description no longer removes every real file (a pretty line with a null C4 ID read its alignment padding into the name); a pretty line with a null timestamp no longer reads its padding into a link target (`c4 id -e` on a tree holding an epoch-dated symlink wrote a file that read back with every such link pointing elsewhere, a different ID, exit 0); `c4 cat -r` names every listing the store lacks and exits 2, and `c4 patch -r` refuses a partial tree; `c4 id -q` without `-s` says on stderr that it printed nothing. c4py: the same names-only deletion fix; a pretty time marked UTC was read as the reader's local time, hours wrong with no error and a different C4 ID, and is now read as UTC; numeric offsets (which c4ts writes) parse; an unknown zone abbreviation is still refused. c4ts: the same names-only deletion fix. The zero-versus-null rule stays out of every implementation on this line until core ships it: c4's 1.0.x pretty encoder writes ten dashes for a null mode, which a port with the rule would read as a known zero. c4-swift's v1.0.25 tag points at the commit v1.0.24 tags (524c392): c4-swift has no release line and no version site, and every commit on its main since 1.0.24 carries the zero-versus-null rule held out above, so the lockstep tag stays on the code that shipped. libc4, c4sh, c4git and c4-containers ship version-lockstep. The farm tools stay at c4-operator v0.2.2. Release record: the push CI run on c4 164fbd3 (run 42948145531) failed one leg, test (windows-latest, 1.21), on a timing flake in cmd/c4/internal/scan/progressive_scanner_test.go (a subtest that sleeps 50 ms and expects a non-empty snapshot); the pull-request run on the same commit had passed 7/7, nothing in 1.0.25 touches that scanner, and the failed leg passed on one re-run before the gate and the tag. The test is deflaked after the release."
+    },
+    "1.0.26": {
+      "date": "2026-11-16",
+      "components": {
+        "c4": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4",
+          "lang": "go",
+          "build": "cmd/c4"
+        },
+        "c4sh": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4sh",
+          "lang": "go",
+          "build": "."
+        },
+        "c4git": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4git",
+          "lang": "go",
+          "build": "cmd/c4git"
+        },
+        "c4py": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4py",
+          "lang": "python",
+          "publish": "pypi"
+        },
+        "c4ts": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4ts",
+          "lang": "typescript",
+          "publish": "npm"
+        },
+        "c4-swift": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4-swift",
+          "lang": "swift",
+          "publish": "spm"
+        },
+        "libc4": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/libc4",
+          "lang": "c",
+          "publish": "source"
+        },
+        "c4-containers": {
+          "version": "1.0.26",
+          "repo": "Avalanche-io/c4-containers",
+          "lang": "docker",
+          "publish": "ghcr"
+        },
+        "c4-farm": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-farm",
+          "test": "./cmd/c4-farm/... ./internal/farmcli/...",
+          "note": "the farm CLI; c4 farm ... runs it. Pinned to the c4-operator tag the suite was tested with; c4-operator pins c4 in its go.mod the other way. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-farm_{version}_{os}_{arch}"
+        },
+        "c4-agent": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-agent",
+          "goos": [
+            "darwin",
+            "linux"
+          ],
+          "test": "./cmd/c4-agent/...",
+          "note": "the host runner; macOS and Linux only. Taken from the c4-operator GitHub release (goreleaser archive, with the tool locks the release workflow embeds), not rebuilt from source",
+          "asset": "c4-agent_{version}_{os}_{arch}"
+        },
+        "c4-unit": {
+          "version": "0.2.2",
+          "repo": "Avalanche-io/c4-operator",
+          "lang": "go",
+          "build": "cmd/c4-unit",
+          "asset": "c4-unit_{version}_{os}_{arch}",
+          "test": "./cmd/c4-unit/...",
+          "note": "the unit runner c4-agent runs its units with; in the archives beside c4-agent (the c4-agent formula carries it on Homebrew)"
+        }
+      },
+      "notes": "Patch. c4: `c4 patch` no longer pairs one file's name with another file's bytes on a case-insensitive volume: names the destination folds together are measured by identity in a probe folder, a case-only rename keeps the entry, and a dry run reports collision candidates unmeasured; `c4 patch` no longer empties a directory the target lists only as one line; a name or link target ending in a backslash reads back as itself; a damaged size or mode field is an error naming the line, never a different value (shared damaged-line vector); the scanner's lifecycle races are fixed and CI runs the race detector. c4py and c4ts: the decoder reads link targets, alignment padding and two-byte escapes as core does and refuses a damaged size or mode, passing the link-target, backslash-name and damaged-line vectors; c4py's scan records a directory's own mtime, so its scan C4 IDs match the Go CLI's; c4ts compares every field when it makes a patch, so a time- or mode-only change is written. c4-swift: a c4-prefixed link target under a null mode is a target, not a hard link; a C4 ID field that does not parse, a damaged mode and a damaged size are errors naming the line; pretty padding never joins a name or target; non-ASCII names read, and every name is keyed by its UTF-8 bytes, so NFC and NFD forms are two names. c4-swift now has a release line, and its v1.0.26 tag is on it. libc4: one entry-line parser applying the same decoder rules, refusing every padded line by name, applying SafeName once, and giving the empty description its C4 ID. c4sh, c4git and c4-containers ship version-lockstep. The farm tools stay at c4-operator v0.2.2."
     },
     "1.1.0": {
       "date": null,
