@@ -9,24 +9,23 @@ together, or it doesn't ship.
 For coordination workflow + lessons learned across releases, see the
 workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
 
-## Suite Version 1.0.20
+## Suite Version 1.0.26
 
 | Component | Version | Language | Install |
 |-----------|---------|----------|---------|
-| [c4](https://github.com/Avalanche-io/c4) | 1.0.20 | Go | `brew install mrjoshuak/tap/c4` or binary download |
-| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.20 | Go | included in Homebrew formula |
-| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.20 | Go | included in Homebrew formula |
-| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.20 | Python | `pip install c4py` |
-| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.20 | TypeScript | `npm install @avalanche-io/c4` |
-| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.20 | Swift | SPM: `from: "1.0.20"` |
-| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.20 | C | build from source |
-| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.20 | Docker | `ghcr.io/avalanche-io/c4` |
+| [c4](https://github.com/Avalanche-io/c4) | 1.0.26 | Go | `brew install mrjoshuak/tap/c4` or binary download |
+| [c4sh](https://github.com/Avalanche-io/c4sh) | 1.0.26 | Go | included in Homebrew formula |
+| [c4git](https://github.com/Avalanche-io/c4git) | 1.0.26 | Go | included in Homebrew formula |
+| [c4py](https://github.com/Avalanche-io/c4py) | 1.0.26 | Python | `pip install c4py` |
+| [c4ts](https://github.com/Avalanche-io/c4ts) | 1.0.26 | TypeScript | `npm install @avalanche-io/c4` |
+| [c4-swift](https://github.com/Avalanche-io/c4-swift) | 1.0.26 | Swift | SPM: `from: "1.0.26"` |
+| [libc4](https://github.com/Avalanche-io/libc4) | 1.0.26 | C | build from source |
+| [c4-containers](https://github.com/Avalanche-io/c4-containers) | 1.0.26 | Docker | `ghcr.io/avalanche-io/c4` |
 
-From the v1.1 suite (`releases.json` entry `1.1.0`, planned), two more
-components are built from [c4-operator](https://github.com/Avalanche-io/c4-operator)
-at its pinned tag and ship in the suite archives: `c4-farm` (all
-platforms) and `c4-agent` (macOS and Linux). `c4 farm ...` runs
-`c4-farm`.
+Three more components are built from [c4-operator](https://github.com/Avalanche-io/c4-operator)
+at its pinned tag (v0.2.2 in suite 1.0.26) and ship in the suite archives:
+`c4-farm` and `c4-unit` (all platforms) and `c4-agent` (macOS and Linux).
+`c4 farm ...` runs `c4-farm`.
 
 ## How it works
 
@@ -106,15 +105,15 @@ npm install @avalanche-io/c4-node   # TypeScript (Node extensions)
 
 ```swift
 // Swift Package Manager
-.package(url: "https://github.com/Avalanche-io/c4-swift.git", from: "1.0.12")
+.package(url: "https://github.com/Avalanche-io/c4-swift.git", from: "1.0.26")
 ```
 
 ### Containers
 
 ```bash
-docker pull ghcr.io/avalanche-io/c4:1.0.12
-docker pull ghcr.io/avalanche-io/c4-pipeline:1.0.12
-docker pull ghcr.io/avalanche-io/c4-s3worker:1.0.12
+docker pull ghcr.io/avalanche-io/c4:v1.0.26
+docker pull ghcr.io/avalanche-io/c4-pipeline:v1.0.26
+docker pull ghcr.io/avalanche-io/c4-s3worker:v1.0.26
 ```
 
 ## Adding a new suite release
