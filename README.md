@@ -6,8 +6,8 @@ single suite version, driven by `releases.json` and the scripts in
 `scripts/`. Do NOT release components individually — the suite ships
 together, or it doesn't ship.
 
-For coordination workflow + lessons learned across releases, see the
-workspace-level `/Users/joshua/ws/active/c4/RELEASE.md`.
+The maintainers' coordination runbook and the lessons learned across
+releases are kept outside this repository.
 
 ## Suite Version 1.0.26
 
@@ -118,12 +118,17 @@ docker pull ghcr.io/avalanche-io/c4-s3worker:v1.0.26
 
 ## Adding a new suite release
 
-The full process is documented at workspace-level
-`/Users/joshua/ws/active/c4/RELEASE.md`. Summary:
+The full process is in the maintainers' runbook, outside this repository.
+Summary:
 
-1. Per-component bump + tag + push for all 8 repos (use the iTerm-tabs
-   pattern at `/Users/joshua/ws/active/c4/docs/agent-team-iterm-pattern.md`
-   for parallel execution).
+1. Per-component bump and push for all 8 repos, then
+   `./scripts/gate.sh <component> <version> <checkout>` on the exact commit
+   to be tagged, then the tag and its push. The gate checks that the tree is
+   clean and pushed, CI is green for that commit (c4-containers'
+   images build on the tag instead), every version site says the
+   version, a Go tool's binary reports it, go.mod has no `replace`, no
+   session names are in tracked text, and the tag is free. Nothing is tagged
+   or published for a component until its gate passes.
 2. Edit `releases.json` — add a new version entry with updated component
    versions; set `"latest"` to the new version.
    **Make the notes public text before anything else.** The `notes` become
@@ -138,14 +143,13 @@ The full process is documented at workspace-level
    c4toolkit GitHub releases page.
 6. `./scripts/homebrew.sh <version>` — regenerates `homebrew/c4.rb`.
 7. Copy that formula to `mrjoshuak/homebrew-tap/Formula/c4.rb`, commit
-   `Update c4 formula to v<version>`, push. The tap's `c4-farm` and
-   `c4-agent` formulas come from the c4-operator release the suite pins
-   in `releases.json`: `./scripts/farm-formulas.sh <operator-version>`
-   generates `homebrew/c4-farm.rb` and `homebrew/c4-agent.rb` from that
-   release's checksums; copy them to the tap the same way (c4-operator's
-   goreleaser can also push them itself when its `HOMEBREW_TAP_TOKEN` is
-   set; either way the tap ends up with the same files).
-8. Verify with the commands in workspace-level `RELEASE.md`.
+   `Update c4 formula to v<version>`, push. The c4 formula brings c4-farm,
+   c4-agent and c4-unit itself. The tap's separate `c4-farm` and `c4-agent`
+   formulas are deprecated (since 2026-10-26, pointing at
+   `brew install mrjoshuak/tap/c4`) and stay at 0.2.1, so there is nothing
+   to copy for them. `./scripts/farm-formulas.sh <operator-version>` still
+   generates them, deprecated, should they need regenerating.
+8. Verify the published release with the maintainers' runbook checks.
 
 PyPI (`c4py`) and npm (`@avalanche-io/c4`, `@avalanche-io/c4-node`)
 publishes are done as part of step 1 (the per-component flow), not in
@@ -168,10 +172,8 @@ Two things learned releasing 1.0.24 right after a reboot (2026-11-07):
 
 ## Per-release coordination homes
 
-Each release keeps its working specs, module briefings, friction
-reports, and iTerm-tab orchestration scripts at
-`/Users/joshua/ws/active/c4/release-vX.Y.Z/`. Look at the most recent
-one for the actual templates the next release will reuse.
+Each release keeps its working specs, module briefings and friction
+reports in the maintainers' workspace, outside this repository.
 
 ## License
 
