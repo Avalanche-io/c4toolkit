@@ -33,6 +33,16 @@ if ! jq -e ".releases[\"${SUITE_VERSION}\"]" "$RELEASES" &>/dev/null; then
     exit 1
 fi
 
+# A release build starts from an empty folder. The archive step packs every
+# folder it finds in $DIST, so binaries left by an earlier run (one that
+# failed partway, or built a component at another version) would be packed
+# into this release beside the right ones. Nothing is deleted here: a person
+# looks at what is there and moves it away.
+if [ -d "$DIST" ] && [ -n "$(ls -A "$DIST" 2>/dev/null)" ]; then
+    echo "Error: $DIST already exists and is not empty (left by an earlier run?)." >&2
+    echo "Look at it, move it away, and run again; a release is built into an empty folder." >&2
+    exit 1
+fi
 mkdir -p "$DIST"
 
 PLATFORMS=(

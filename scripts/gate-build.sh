@@ -25,6 +25,9 @@ PKG="${3:?usage: gate-build.sh CHECKOUT COMMIT PACKAGE}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # The Go environment, shared with build.sh so the two cannot drift.
 . "$HERE/go-release-env.sh"
+# The gate builds for the machine it runs on: a caller's GOOS, GOARCH or
+# CGO_ENABLED must not turn its build into another platform's.
+unset GOOS GOARCH CGO_ENABLED
 
 SRC=$(mktemp -d) || { echo "gate-build: no scratch folder" >&2; exit 1; }
 cleanup() {

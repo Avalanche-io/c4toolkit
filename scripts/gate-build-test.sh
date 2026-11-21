@@ -70,5 +70,12 @@ want "go_release: GOWORK is off" "$(hostile GOWORK)" "off"
 want "go_release: the caller's GOPROXY is dropped" "$(hostile GOPROXY)" "$(env -u GOPROXY GOENV=off go env GOPROXY)"
 want "go_release: the caller's GOSUMDB=off is dropped" "$(hostile GOSUMDB)" "$(env -u GOSUMDB GOENV=off go env GOSUMDB)"
 want "go_release: GONOSUMDB, GOPRIVATE and GOINSECURE are empty" "$(hostile GONOSUMDB)$(hostile GOPRIVATE)$(hostile GOINSECURE)" ""
+variant() { GOAMD64=v4 GOARM64=v9.0 GOEXPERIMENT=loopvar GODEBUG=http2client=0 go_release env "$1"; }
+want "go_release: the caller's GOAMD64=v4 is dropped" "$(GOARCH=amd64 variant GOAMD64)" "$(env -u GOAMD64 GOENV=off GOARCH=amd64 go env GOAMD64)"
+want "go_release: the caller's GOARM64 is dropped" "$(GOARCH=arm64 variant GOARM64)" "$(env -u GOARM64 GOENV=off GOARCH=arm64 go env GOARM64)"
+want "go_release: the caller's GOEXPERIMENT is dropped" "$(variant GOEXPERIMENT)" "$(env -u GOEXPERIMENT GOENV=off go env GOEXPERIMENT)"
+want "go_release: the caller's GODEBUG is dropped" "$(variant GODEBUG)" "$(env -u GODEBUG GOENV=off go env GODEBUG)"
+want "go_release: GOOS and GOARCH set by its caller are kept" "$(GOOS=linux GOARCH=arm64 go_release env GOOS GOARCH | tr '\n' ' ')" "linux arm64 "
+want "the gate builds for this machine whatever GOOS the caller has" "$(GOOS=plan9 GOARCH=386 gate)" "tool 1.2.3"
 
 [ "$FAILED" -eq 0 ] && echo "all cases pass" || { echo "FAILED"; exit 1; }
