@@ -123,11 +123,26 @@ if [ -n "$BUILD" ]; then
     if [ "$rc" -eq 0 ]; then ok "go.mod has no replace"
     elif [ "$rc" -eq 1 ]; then fail "go.mod has a replace directive: ${replaced}"
     else fail "go.mod could not be read by go mod edit: ${replaced}"; fi
-    # GOWORK=off: whatever the checks above found, the version reported here
-    # is the binary go.mod alone builds.
-    reported=$(cd "$DIR" && GOWORK=off go run "$BUILD" version 2>/dev/null | head -1) || reported=""
-    if printf '%s\n' "$reported" | "$HERE/version-site.sh" /dev/stdin "${VERSION}"; then ok "binary reports '${reported}'"
-    else fail "binary reports '${reported}', not ${VERSION}"; fi
+    # A caller's GOFLAGS can point the build at another go.mod (-modfile),
+    # swap source files (-overlay) or select a vendor folder. The build
+    # below drops it, and it is refused here so the release shell is known.
+    # (-p=N, which only limits how many builds run at once, is allowed and kept.)
+    goflags_other=$(printf '%s\n' ${GOFLAGS:-} | grep -v -E '^-p=[0-9]+$' | tr '\n' ' ' | sed 's/ *$//' || true)
+    if [ -n "$goflags_other" ]; then
+        fail "GOFLAGS is set in this shell (${goflags_other}): a release is built with none but -p"
+    fi
+    # The binary is built from an export of the commit, in an environment
+    # gate-build.sh sets itself, so nothing in the working tree that is not
+    # in the commit (an untracked .go file, a vendor folder, a go.work) and
+    # nothing in the caller's Go environment reaches it; go mod verify runs
+    # first.
+    if reported=$("$HERE/gate-build.sh" "$DIR" "$SHA" "$BUILD" 2>"${TMPDIR:-/tmp}/gate-build.$$.err"); then
+        if printf '%s\n' "$reported" | "$HERE/version-site.sh" /dev/stdin "${VERSION}"; then ok "binary built from ${SHA:0:7} reports '${reported}'"
+        else fail "binary built from ${SHA:0:7} reports '${reported}', not ${VERSION}"; fi
+    else
+        fail "$(head -1 "${TMPDIR:-/tmp}/gate-build.$$.err")"
+    fi
+    rm -f -- "${TMPDIR:-/tmp}/gate-build.$$.err"
 fi
 
 # 6. Session names.
