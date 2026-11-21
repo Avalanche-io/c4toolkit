@@ -47,6 +47,13 @@ PLATFORMS=(
 WORKDIR=$(mktemp -d)
 trap 'rm -rf "$WORKDIR"' EXIT
 
+# Every Go command below runs through go_release: the environment the
+# release gate builds in (go-release-env.sh), so the binaries that ship are
+# built as the gate's was, whatever GOFLAGS, GOWORK or proxy settings the
+# calling shell has.
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/go-release-env.sh"
+BUILD_FAILS=0
+
 # Build each Go component
 GO_TOOLS=$(jq -r ".releases[\"${SUITE_VERSION}\"].components | to_entries[] | select(.value.lang == \"go\") | .key" "$RELEASES")
 
@@ -81,6 +88,7 @@ for tool in $GO_TOOLS; do
             if ! curl -fsSL -o "$WORKDIR/$tool/${asset}${archive_ext}" "$url"; then
                 echo "    FAIL: ${url}" >&2
                 rm -rf "$outdir"
+                BUILD_FAILS=$((BUILD_FAILS + 1))
                 continue
             fi
             if [ "$archive_ext" = ".zip" ]; then
@@ -97,6 +105,13 @@ for tool in $GO_TOOLS; do
         continue
     }
 
+    # The dependencies in the module cache must be the ones go.sum names.
+    if ! verify=$(cd "$WORKDIR/$tool" && go_release mod verify 2>&1); then
+        echo "  FAIL: go mod verify: $(printf '%s' "$verify" | head -3 | tr '\n' ' ')" >&2
+        BUILD_FAILS=$((BUILD_FAILS + 1))
+        continue
+    fi
+
     # "goos" (read above): the platforms this tool ships on
     for platform in "${PLATFORMS[@]}"; do
         IFS='/' read -r os arch <<< "$platform"
@@ -111,15 +126,22 @@ for tool in $GO_TOOLS; do
         mkdir -p "$outdir"
 
         GOOS=$os GOARCH=$arch CGO_ENABLED=0 \
-            go build -C "$WORKDIR/$tool" \
+            go_release build -C "$WORKDIR/$tool" \
             -trimpath -ldflags="-s -w" \
             -o "$(pwd)/${outdir}/${tool}${ext}" \
             "./${build_pkg}/" 2>/dev/null || {
             echo "    FAIL" >&2
             rm -rf "$outdir"
+            BUILD_FAILS=$((BUILD_FAILS + 1))
         }
     done
 done
+
+# A release is every component on every platform it ships on, or nothing.
+if [ "$BUILD_FAILS" -gt 0 ]; then
+    echo "Error: ${BUILD_FAILS} build(s) failed; no archives were made" >&2
+    exit 1
+fi
 
 # Archive individual tools
 echo "=== Archiving ==="

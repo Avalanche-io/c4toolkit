@@ -8,12 +8,10 @@
 #   - The source is an export of COMMIT (git archive) into a fresh folder,
 #     never the working tree, so nothing untracked or ignored there can
 #     reach the build: a stray .go file, a vendor/ folder, a go.work.
-#   - The Go environment is set here, not inherited: the caller's GOFLAGS
-#     (-modfile, -overlay, -mod=vendor …), GOWORK and GOTOOLCHAIN are
-#     dropped. -mod=readonly ignores a committed vendor/ folder too and
-#     never rewrites go.mod; GOWORK=off ignores any workspace; with
-#     GOTOOLCHAIN=local a toolchain line newer than the installed Go fails
-#     the build instead of fetching another toolchain.
+#   - The Go environment is set, not inherited (go-release-env.sh, the one
+#     build.sh uses too): the caller's GOFLAGS, GOWORK, GOTOOLCHAIN and
+#     module-source settings are dropped; -mod=readonly, GOWORK=off and
+#     GOTOOLCHAIN=local are set.
 #   - `go mod verify` must pass first, so a dependency altered in the module
 #     cache is not built from.
 #
@@ -24,10 +22,9 @@ DIR="${1:?usage: gate-build.sh CHECKOUT COMMIT PACKAGE}"
 SHA="${2:?usage: gate-build.sh CHECKOUT COMMIT PACKAGE}"
 PKG="${3:?usage: gate-build.sh CHECKOUT COMMIT PACKAGE}"
 
-# The one caller setting kept is -p=N, which only limits how many builds run
-# at once.
-PAR=$(printf '%s\n' ${GOFLAGS:-} | grep -E '^-p=[0-9]+$' | head -1 || true)
-gogate() { env -u GOFLAGS -u GOWORK -u GOTOOLCHAIN GOFLAGS="-mod=readonly${PAR:+ $PAR}" GOWORK=off GOTOOLCHAIN=local go "$@"; }
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# The Go environment, shared with build.sh so the two cannot drift.
+. "$HERE/go-release-env.sh"
 
 SRC=$(mktemp -d) || { echo "gate-build: no scratch folder" >&2; exit 1; }
 cleanup() {
@@ -39,10 +36,10 @@ trap cleanup EXIT
 if ! git -C "$DIR" archive "$SHA" | tar -x -C "$SRC"; then echo "gate-build: could not export ${SHA}" >&2; exit 1; fi
 [ -f "$SRC/go.mod" ] || { echo "gate-build: ${SHA} has no go.mod" >&2; exit 1; }
 
-if ! verify=$(cd "$SRC" && gogate mod verify 2>&1); then
+if ! verify=$(cd "$SRC" && go_release mod verify 2>&1); then
     echo "gate-build: go mod verify failed: $(printf '%s' "$verify" | head -3 | tr '\n' ' ')" >&2; exit 1
 fi
-if ! out=$(cd "$SRC" && gogate run "$PKG" version 2>"$SRC/.gate-build.err"); then
+if ! out=$(cd "$SRC" && go_release run "$PKG" version 2>"$SRC/.gate-build.err"); then
     echo "gate-build: the build or the run failed: $(head -3 "$SRC/.gate-build.err" | tr '\n' ' ')" >&2; exit 1
 fi
 printf '%s\n' "$out" | head -1

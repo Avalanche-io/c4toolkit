@@ -61,4 +61,14 @@ git commit -q -am "asks for go 1.999"
 NEWER=$(git rev-parse HEAD)
 if out=$("$HERE/gate-build.sh" "$T/repo" "$NEWER" . 2>/dev/null); then bad "a go line newer than the installed Go builds anyway ('$out')"; else ok "a go line newer than the installed Go fails the build"; fi
 
+# 6. The shared environment itself, from a hostile shell.
+. "$HERE/go-release-env.sh"
+hostile() { GOFLAGS="-p=3 -modfile=$T/alt.mod" GOWORK=$T/none.work GOTOOLCHAIN=go1.999 GOPROXY=http://proxy.studio.example GOSUMDB=off GONOSUMDB='*' GOPRIVATE='*' GOINSECURE='*' go_release env "$1"; }
+want "go_release: GOFLAGS is readonly plus the caller's -p only" "$(hostile GOFLAGS)" "-mod=readonly -p=3"
+want "go_release: GOTOOLCHAIN is local" "$(hostile GOTOOLCHAIN)" "local"
+want "go_release: GOWORK is off" "$(hostile GOWORK)" "off"
+want "go_release: the caller's GOPROXY is dropped" "$(hostile GOPROXY)" "$(env -u GOPROXY GOENV=off go env GOPROXY)"
+want "go_release: the caller's GOSUMDB=off is dropped" "$(hostile GOSUMDB)" "$(env -u GOSUMDB GOENV=off go env GOSUMDB)"
+want "go_release: GONOSUMDB, GOPRIVATE and GOINSECURE are empty" "$(hostile GONOSUMDB)$(hostile GOPRIVATE)$(hostile GOINSECURE)" ""
+
 [ "$FAILED" -eq 0 ] && echo "all cases pass" || { echo "FAILED"; exit 1; }
