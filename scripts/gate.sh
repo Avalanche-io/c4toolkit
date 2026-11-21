@@ -40,6 +40,15 @@ ok() { echo "  ok: $*"; }
 site() {
     if "$HERE/version-site.sh" "$DIR/$1" "$2"; then ok "$1 says $2"; else fail "$1 does not say '$2'"; fi
 }
+# heading FILE PATTERN: as site, and the pattern must begin its line.
+heading() {
+    if "$HERE/version-site.sh" --line-start "$DIR/$1" "$2"; then ok "$1 has the heading $2"; else fail "$1 has no line starting '$2'"; fi
+}
+# pin MODULE VERSION: go.mod requires the module at exactly that version, on
+# every require line that names it (gomod-pin.sh; comments do not count).
+pin() {
+    if "$HERE/gomod-pin.sh" "$DIR/go.mod" "$1" "$2"; then ok "go.mod requires $1 $2"; else fail "go.mod does not require $1 at exactly $2"; fi
+}
 
 echo "Gate: ${COMPONENT} v${VERSION} at ${DIR}"
 
@@ -69,15 +78,15 @@ BUILD=""
 case "$COMPONENT" in
     c4)
         site cmd/c4/main.go "const version = \"${VERSION}\""
-        site CHANGELOG.md "## v${VERSION}"
+        heading CHANGELOG.md "## v${VERSION}"
         BUILD=./cmd/c4 ;;
     c4sh)
         site main.go "const version = \"${VERSION}\""
-        site go.mod "github.com/Avalanche-io/c4 v${VERSION}"
+        pin github.com/Avalanche-io/c4 "v${VERSION}"
         BUILD=. ;;
     c4git)
         site cmd/c4git/main.go "c4git ${VERSION}"
-        site go.mod "github.com/Avalanche-io/c4 v${VERSION}"
+        pin github.com/Avalanche-io/c4 "v${VERSION}"
         BUILD=./cmd/c4git ;;
     c4py)
         site pyproject.toml "version = \"${VERSION}\""
