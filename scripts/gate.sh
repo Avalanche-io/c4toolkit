@@ -33,9 +33,12 @@ ERRORS=0
 fail() { echo "  FAIL: $*"; ERRORS=$((ERRORS + 1)); }
 ok() { echo "  ok: $*"; }
 
-# site FILE PATTERN: the file must contain the pattern (fixed string).
+# site FILE PATTERN: the file must contain the pattern (a fixed string) as a
+# whole version, not as the start of a longer one: "v1.0.27" must not be
+# satisfied by the pseudo-version "v1.0.27-0.2026…-7d036c5cd957", which names
+# an untagged commit (version-site.sh; its cases are version-site-test.sh).
 site() {
-    if grep -q -F -- "$2" "$DIR/$1" 2>/dev/null; then ok "$1 says $2"; else fail "$1 does not say '$2'"; fi
+    if "$HERE/version-site.sh" "$DIR/$1" "$2"; then ok "$1 says $2"; else fail "$1 does not say '$2'"; fi
 }
 
 echo "Gate: ${COMPONENT} v${VERSION} at ${DIR}"
