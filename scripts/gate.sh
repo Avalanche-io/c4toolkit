@@ -108,12 +108,26 @@ case "$COMPONENT" in
         fail "unknown component ${COMPONENT}: add its version sites to gate.sh" ;;
 esac
 if [ -n "$BUILD" ]; then
-    reported=$(cd "$DIR" && go run "$BUILD" version 2>/dev/null | head -1) || reported=""
-    case "$reported" in
-        *"${VERSION}"*) ok "binary reports '${reported}'" ;;
-        *) fail "binary reports '${reported}', not ${VERSION}" ;;
-    esac
-    if grep -q -E '^replace ' "$DIR/go.mod" 2>/dev/null; then fail "go.mod has a replace directive"; else ok "go.mod has no replace"; fi
+    # The binary must be built from go.mod's own requirements and nothing
+    # else. Two things redirect a Go build to a local tree without changing a
+    # require line, so both are refused, and Go itself is asked about each:
+    # a replace directive (however it is indented or grouped), and a
+    # workspace (a go.work in the checkout or any folder above it, tracked
+    # or not, or one named by GOWORK).
+    if [ -n "${GOWORK:-}" ] && [ "${GOWORK}" != "off" ]; then
+        fail "GOWORK is set in this shell (${GOWORK}): the build would use that workspace"
+    fi
+    work=$(cd "$DIR" && env -u GOWORK go env GOWORK 2>/dev/null) || work="?"
+    if [ -n "$work" ]; then fail "a Go workspace applies to this checkout (${work}): the build would not come from go.mod alone"; else ok "no Go workspace applies"; fi
+    replaced=$("$HERE/gomod-replaces.sh" "$DIR/go.mod") && rc=0 || rc=$?
+    if [ "$rc" -eq 0 ]; then ok "go.mod has no replace"
+    elif [ "$rc" -eq 1 ]; then fail "go.mod has a replace directive: ${replaced}"
+    else fail "go.mod could not be read by go mod edit: ${replaced}"; fi
+    # GOWORK=off: whatever the checks above found, the version reported here
+    # is the binary go.mod alone builds.
+    reported=$(cd "$DIR" && GOWORK=off go run "$BUILD" version 2>/dev/null | head -1) || reported=""
+    if printf '%s\n' "$reported" | "$HERE/version-site.sh" /dev/stdin "${VERSION}"; then ok "binary reports '${reported}'"
+    else fail "binary reports '${reported}', not ${VERSION}"; fi
 fi
 
 # 6. Session names.

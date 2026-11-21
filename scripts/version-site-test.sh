@@ -60,4 +60,43 @@ pin 1 "the module in a replace block"         '	github.com/Avalanche-io/c4 v1.0.
 pin 1 "no require line for the module"        'module github.com/Avalanche-io/c4sh'
 pin 1 "another module with the same prefix"   '	github.com/Avalanche-io/c4sh v1.0.27'
 
+echo "version-site.sh on what a binary reports:"
+site 0 "the version with a platform after it" '1.0.27' 'c4 1.0.27 (darwin/arm64, go1.27.4)'
+site 0 "a bare tool name and version"         '1.0.27' 'c4git 1.0.27'
+site 1 "a longer patch number"                '1.0.27' 'c4 1.0.270 (darwin/arm64, go1.27.4)'
+site 1 "a longer major number"                '1.0.27' 'c4 11.0.27'
+site 1 "a development suffix"                 '1.0.27' 'c4 1.0.27-dev'
+site 1 "nothing reported"                     '1.0.27' ''
+
+# replaces WANT(0|1|2) NAME CONTENT   (a go.mod; go mod edit is the reader)
+replaces() {
+    printf '%s\n' "$3" > "$F"
+    "$HERE/gomod-replaces.sh" "$F" >/dev/null
+    report $? "$1" "$2"
+}
+MOD='module example.test/tool
+
+go 1.21
+
+require github.com/Avalanche-io/c4 v1.0.27'
+echo "gomod-replaces.sh:"
+if command -v go >/dev/null 2>&1; then
+    replaces 0 "no replace"                         "$MOD"
+    replaces 1 "a replace at the line start"        "$MOD
+replace github.com/Avalanche-io/c4 => ../c4"
+    replaces 1 "a replace indented with a tab"      "$MOD
+	replace github.com/Avalanche-io/c4 => ../c4"
+    replaces 1 "a replace in a block"               "$MOD
+replace (
+	github.com/Avalanche-io/c4 => ../c4
+)"
+    replaces 1 "a replace of another module"        "$MOD
+replace example.test/other => ../other"
+    replaces 0 "the word replace in a comment only" "$MOD
+// replace github.com/Avalanche-io/c4 => ../c4"
+    replaces 2 "a file go mod edit cannot read"     'this is not a go.mod {'
+else
+    echo "  FAIL: go is not on PATH, so the replace cases did not run"; FAILED=1
+fi
+
 [ "$FAILED" -eq 0 ] && echo "all cases pass" || { echo "FAILED"; exit 1; }
